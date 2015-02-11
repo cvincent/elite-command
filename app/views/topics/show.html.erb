@@ -1,0 +1,61 @@
+<h2><%= link_to 'Forums', forums_url %> &gt; <%= link_to @forum.name, forum_url(@forum) %> &gt; <%= @topic.name %></h2>
+
+<p>
+  <% if @topic.user_subscribed?(current_user) -%>
+    <%= button_to 'Unsubscribe', unsubscribe_topic_url(@topic), :method => :post %>
+  <% elsif current_user -%>
+    <%= button_to 'Subscribe', subscribe_topic_url(@topic), :method => :post %>
+  <% end -%>
+</p>
+
+<table id="topic_listing">
+  <% @topic.replies.limit(per_page).skip(page * per_page).each do |r| %>
+    <tr>
+      <td class="meta" valign="top">
+        <p>
+          Posted by <%= user_link(r.user) %><br/>
+          <%= r.created_at.strftime(DATETIME_FORMAT) %>
+        </p>
+      </td>
+      <td>
+        <%= simple_format(auto_link(r.body)) %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= render :partial => 'layouts/paginator', :locals => { :collection => @topic.replies, :page => page, :per => per_page, :item_plural => 'posts', :base_url => topic_url(@topic) } %>
+
+<% if current_user %>
+  <h3>Post a Reply</h3>
+
+  <%= form_for @reply, :url => create_reply_topic_url(@topic), :method => :post do |f| %>
+    <table>
+      <tr>
+        <th valign="top">Body:</th>
+        <td><%= f.text_area :body %></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <label>
+            <%= check_box_tag :subscribe, '1', current_user.email_forum_updates, :disabled => !current_user.email_forum_updates %>
+            Subscribe to this topic
+          </label>
+          <% if !current_user.email_forum_updates -%>
+            <br/>You must <%= link_to 'enable forum updates', edit_user_url(current_user) %> to receive emails about replies to this topic.
+          <% end -%>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: right">
+          <%= f.submit 'Post Reply', class: 'main' %>
+        </td>
+      </tr>
+    </table>
+  <% end %>
+<% else %>
+  <p>You must be logged in to post a reply. Log in or <%= link_to 'sign up', new_user_url %>.</p>
+<% end %>
+
+<%= render partial: 'layouts/global_chat' %>

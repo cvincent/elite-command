@@ -1,0 +1,108 @@
+<h2><%= link_to 'Help', url_for(action: 'index') %> &gt; Combat</h2>
+
+<p>Combat is one of the most important aspects of Elite Command to understand. A thorough knowledge of the combat system helps you predict the outcome of your attacks before you commit your units, allowing you make wiser decisions.</p>
+
+<p>Combat is calculated using attack and armor. Each unit has both armor type and armor strength. Each unit also has an attack strength for each armor type. Both a unit's attack and armor strengths can be modified for better or for worse by the terrain upon which the unit sits. Just before you attack an enemy unit, a dialog pops up which shows the final calculated attack and armor values for both you and the defending unit.</p>
+
+<p>In normal combat, each unit gets a chance to attack. Both attack and counterattack are calculated simultaneously. One way to gain a huge advantage in combat is to attack an enemy unit from either outside its range (such as attacking a Tank with Artillery from a distance) or inside its range (such as attacking an Artillery with a Tank from melee range). The attack dialog will tell you whether or not the defending unit will be able to counterattack.</p>
+
+<p>Finally, a unit's health determines the maximum amount of damage the unit can deal. All units begin with 10 health. For each unit of remaining health, the unit gets a chance to hit. The better the attacker's ratio of attack versus the defender's armor, the better the chance to hit. Each hit deals 1 damage.</p>
+
+<p>Putting it all together, if a unit with 8 health attacks a unit with 4 health:</p>
+
+<ol>
+  <li>The dice are rolled 8 times for the attacker, using the ratio of the attacker's attack strength to the defender's armor strength to determine hits.</li>
+  <li>The dice are rolled 4 times for the defender, using the ratio of the defender's attack strength to the attacker's armor strength to determine hits.</li>
+  <li>The calculated damages are dealt to each unit. If a unit comes down to 0 or less health, it is killed and removed from play.</li>
+</ol>
+
+<p>There are two additional penalties to consider. The first is flank penalty. A unit gets a -1 flank penalty to its armor for each time it is attacked in a round. Lastly, there is the capturing penalty. A unit which is capturing a base receives a -2 capturing penalty to its armor.</p>
+
+<h3>Unit Combat Stats</h3>
+
+<table class="listing_table" cellspacing="0">
+  <% armor_types = [:personnel, :armored, :air, :naval] %>
+
+  <tr>
+    <th rowspan="2">Unit</th>
+    <th rowspan="2">Armor Type</th>
+    <th rowspan="2">Armor Strength</th>
+    <th colspan="<%= armor_types.size %>">Attack Strength vs. Armor Type</th>
+  </tr>
+
+  <tr>
+    <% armor_types.each do |a| %>
+      <th><%= a.to_s.humanize %></th>
+    <% end %>
+  </tr>
+
+  <% UnitDefinitions.keys.sort_by { |k| UnitDefinitions[k][:credits] }.each do |name| %>
+    <% attrs = UnitDefinitions[name] %>
+    <tr>
+      <td align="center">
+        <div style="background: url(/images/game/units.png); background-position: -<%= 64 * UnitDefinitions.keys.index(name) %>px -34px; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <div><%= link_to name.to_s.underscore.humanize.titlecase, '#' %></div>
+      </td>
+      <td align="center">
+        <%= attrs[:armor_type].to_s.humanize %>
+      </td>
+      <td align="center">
+        <%= attrs[:armor] %>
+      </td>
+      <% armor_types.each do |a| %>
+        <td align="center">
+          <%= attrs[:attack][a] %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+<h3>Unit Terrain Modifiers</h3>
+
+<table class="listing_table" cellspacing="0">
+  <tr>
+    <th rowspan="2">Unit</th>
+    <th colspan="<%= TileTypes.size - 1 %>">Combat Modifier (Attack / Armor)</th>
+  </tr>
+
+  <% tile_array = [:plains, :woods, :desert, :tundra, :swamp, :mountains, :ford, :shallow_water, :sea, :base, :seaport, :airfield, :road, :bridge] %>
+
+  <tr>
+    <% tile_array.each do |t| %>
+      <% i = TileTypes.index(t) %>
+      <th>
+        <% if t == :road %>
+          <div style="background: url(/images/game/roads.png); background-position: 0 -612px; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <% elsif t == :bridge %>
+          <div style="background: url(/images/game/bridges.png); background-position: 0 -34px; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <% elsif ![:base, :airfield, :seaport].include?(t) %>
+          <div style="background: url(/images/game/tileset.png); background-position: -<%= 32 * i %>px center; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <% else %>
+          <div style="background: url(/images/game/bases.png); background-position: -<%= 32 * BaseDefinitions.keys.map(&:to_s).map(&:downcase).index(t.to_s) %>px 0; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <% end %>
+        <div><%= t.to_s.humanize.capitalize %></div>
+      </th>
+    <% end %>
+  </tr>
+
+  <% UnitDefinitions.keys.sort_by { |k| UnitDefinitions[k][:credits] }.each do |name| %>
+    <% attrs = UnitDefinitions[name] %>
+    <tr>
+      <td align="center">
+        <div style="background: url(/images/game/units.png); background-position: -<%= 64 * UnitDefinitions.keys.index(name) %>px -34px; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <div><%= link_to name.to_s.underscore.humanize.titlecase, '#' %></div>
+      </td>
+      <% tile_array.each do |t| %>
+        <% i = TileTypes.index(t) %>
+        <td align="center">
+          <%= attrs[:attack_bonus][t] > -1 ? '+' : '' %><%= attrs[:attack_bonus][t] %>
+          /
+          <%= attrs[:armor_bonus][t] > -1 ? '+' : '' %><%= attrs[:armor_bonus][t] %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to '&larr; Back to Help index'.html_safe, url_for(action: 'index') %></p>

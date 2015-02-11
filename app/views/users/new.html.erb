@@ -1,0 +1,32 @@
+<h2>Begin your journey to glory!</h2>
+
+<p>Welcome to Elite Command! Fill out the form below, and temper your strategic wits to the task of world conquest!</p>
+
+<%= render :partial => 'layouts/errors', :locals => { :errors => @user.errors } %>
+
+<%= form_for @user do |f| %>
+  <table id="new_user_form">
+    <tr>
+      <th><label>Username:</label></th>
+      <td><%= f.text_field :username %></td>
+    </tr>
+    <tr>
+      <th><label>Email:</label></th>
+      <td><%= f.text_field :email %></td>
+    </tr>
+    <tr>
+      <th><label>Password:</label></th>
+      <td><%= f.password_field :password %></td>
+    </tr>
+    <tr>
+      <th><label>Confirm Password:</label></th>
+      <td><%= f.password_field :password_confirmation %></td>
+    </tr>
+    <tr>
+      <td style="text-align: right" colspan="2">
+        <%#= hidden_field_tag :invite_code, params[:invite_code] %>
+        <%= f.submit 'Create Account', :class => 'main' %>
+      </td>
+    </tr>
+  </table>
+<% end %>

@@ -1,0 +1,25 @@
+<h2><%= link_to 'Help', url_for(action: 'index') %> &gt; Strategy</h2>
+
+<p>This page is dedicated to some basic tips on strategy which might not be immediately obvious to new players. It is not meant to be a complete guide. Please check and contribute to the <%= link_to 'strategy forum', forum_url(Forum.where(:name => 'Strategy').first) %> for more in-depth discussions.</p>
+
+<h3>Opening Moves</h3>
+
+<p>Your opening moves are very important, as they set the stage for the rest of the game. There are two main objectives in the beginning of the game. Your primary objective is to capture Bases, which allow you to build more units and also generate credits, as well as Airfields and Seaports, which allow you to build Air and Naval units, respectively. Your secondary objective is to prevent your opponents from doing the same.</p>
+
+<p>It is important to be aware of unit mobility, since this will determine how long it takes to get to the next capture. One of the main considerations is whether to build Infantry or Rangers. If a Ranger would get there faster, it is probably better to go that route. If not, then use Infantry instead and save those credits.</p>
+
+<p>Preventing opponents from capturing is best done by Humvees or Snipers. Humvees are able to move fast and may be able to stop an enemy Personnel unit short of reaching its target. Snipers are simply great at picking off Personnel units which are already capturing. Snipers are also a good option for capturing themselves, since an enemy will be more reluctant to use their vulnerable Snipers against another Sniper, which is able to fire back.</p>
+
+<h3>Flanking Tactics</h3>
+
+<p>Flanking is an important method for gaining the edge in combat. Each successive attack hits a defending unit with an additional flanking penalty. This is often the only way to stop Heavy Tanks, using multiple Artillery shells to wear it down. Flanking is also a great way to use your weak or damaged units; the penalty applied is the same no matter how much damage the attacker is able to deal, so weak or damaged units are still useful for softening up an enemy unit before going in for the kill with one of your more stronger units.</p>
+
+<h3>Naval Tactics</h3>
+
+<p>An easy to way to inspire fear is to build a Cruiser or two. These beastly units can pack two very hard punches each round. However, Cruisers are vulnerable to "kiting", which is the tactic of using a Destroyer to fire on the Cruiser from outside its range and then back off. Doing this repeatedly can take a Cruiser down safely, as the flanking penalties start to add up. However, it still takes a lot to do it successfully, so consider whether your Destroyers are better used elsewhere first.</p>
+
+<h3>Community Tactics</h3>
+
+<p>While there are some obvious and intentional tactics built into the game, Elite Command is still a very open-ended game, and new strategies are discovered frequently. Participate in the <%= link_to 'strategy forum', forum_url(Forum.where(:name => 'Strategy').first) %> and share your discoveries with others as well as pick up a few tricks for your own use!</p>
+
+<p><%= link_to '&larr; Back to Help index'.html_safe, url_for(action: 'index') %></p>

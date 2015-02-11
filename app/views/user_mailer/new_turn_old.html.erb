@@ -1,0 +1,11 @@
+<h1>Hello, <%= @user.username %>!</h1>
+
+<p>It is now your turn in <%= @game.name %> on Elite Command.</p>
+
+<p><strong><%= link_to 'Take your turn!', game_url(@game) %></strong></p>
+
+<p>Good luck!</p>
+
+<hr/>
+
+<p>You have received this email because you are playing a game of Elite Command. To unsubscribe, update your <%= link_to 'game options', game_url(@game) %> or your <%= link_to 'global email settings', edit_user_url(@user) %>.</p>

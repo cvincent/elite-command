@@ -1,0 +1,48 @@
+<h2>Funnels > <%= @funnel.name %></h2>
+
+
+<div id="sidebar">
+  <h3>Funnels</h3>
+  <ul>
+    <% @funnels.each do |f| %>
+      <li><%= link_to f.name, admin_funnel_url(f) %></li>
+    <% end %>
+  </ul>
+</div>
+
+<% [[:user_src_1, @step_results_1], [:user_src_2, @step_results_2]].each do |src_param, step_results| %>
+  <div style="width: 300px; float: left; margin-right: 10px;">
+    <% selected_src = params[src_param] %>
+    <% other_src = (src_param == :user_src_1 ? params[:user_src_2] : params[:user_src_1]) %>
+    <h3><%= @funnel.name %> from <%= selected_src %></h3>
+
+    <%= form_tag '#', :method => :get do %>
+      <p>
+        <% user_src_opts = options_for_select(@user_srcs, selected_src) %>
+        <%= select_tag src_param, user_src_opts %>
+        <%= hidden_field_tag((src_param == :user_src_1 ? :user_src_2 : :user_src_1), other_src) %>
+        <%= submit_tag 'Update' %>
+      </p>
+    <% end %>
+
+    <% first_total = nil %>
+    <% last_total = nil %>
+    <% step_results.each do |step| %>
+      <% step_name, count = *step %>
+      <% first_total = count if first_total.nil? %>
+      <% last_total ||= count %>
+      <% pct = (last_total == 0 ? 0 : count.to_f / last_total.to_f) %>
+      <% opct = (first_total == 0 ? 0 : count.to_f / first_total.to_f) %>
+      <p>
+        <%= number_to_percentage(pct * 100, :precision => 2) %>
+        (<%= count %>): <%= step_name.to_s.humanize %>
+      </p>
+      <div style="background: green; height: 24px; width: <%= (opct * 100).to_i %>%; margin-bottom: 1em;">
+        <%= number_to_percentage(opct * 100, :precision => 2) %>
+      </div>
+      <% last_total = count %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="clear"></div>

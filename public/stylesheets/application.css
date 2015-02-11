@@ -1,0 +1,696 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  background: black;
+  color: white;
+}
+
+a {
+  color: #900;
+  background: black;
+  text-decoration: none;
+}
+
+a:hover {
+  color: yellow;
+}
+
+a.donator {
+  color: yellow;
+}
+
+a.img_link {
+  background: none;
+}
+
+a.fb_button {
+  padding: 0 !important;
+}
+
+.flash_notice a, .flash_alert a, .highlight a {
+  color: white;
+  text-decoration: underline;
+  background: none;
+}
+
+.clear {
+  clear: both;
+}
+
+.banner_ad {
+  display: block;
+  text-align: center;
+  margin: 1em auto;
+  width: 728px;
+  height: 90px;
+}
+
+.banner_ad.bottom {
+  margin-top: 2em;
+}
+
+.support {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+}
+
+#crib {
+  position: relative;
+  width: 1024px;
+  margin: 0 auto;
+}
+
+#header {
+  height: 100px;
+  background: url(/images/style/header.png) no-repeat center;
+}
+
+#front_crib {
+  width: 1024px;
+  margin: -6px -30px -30px -30px;
+  background: url(/images/style/front-page-border.png) repeat-y;
+  border-bottom: 4px solid black;
+}
+
+#front_plate {
+  width: 524px;
+  margin: 0 auto;
+  padding: 5px 0;
+}
+
+#cta {
+  background: #444;
+  padding: 10px;
+  text-align: center !important;
+  margin-bottom: 30px;
+  margin-top: 1em;
+}
+
+#front_plate h2 {
+  text-align: center;
+}
+
+#extras {
+  clear: both;
+  margin-bottom: 30px;
+}
+
+#like_us {
+  width: 242px;
+  float: left;
+  margin-right: 20px;
+}
+
+#stats {
+  width: 242px;
+  float: left;
+}
+
+h1 {
+  text-indent: -9999px;
+  margin: 0;
+  padding: 0;
+}
+
+h1 a {
+  display: block;
+  background: none;
+  position: absolute;
+  top: 20px;
+  left: 350px;
+  height: 50px;
+  width: 325px;
+  text-decoration: none;
+}
+
+#menu {
+  font-weight: bold;
+  position: absolute;
+  top: 75px;
+  left: 309px;
+  width: 403px;
+  text-align: center;
+}
+
+#login {
+  font-weight: bold;
+  position: absolute;
+  top: 16px;
+  right: 10px;
+}
+
+#login input.text {
+  width: 140px;
+}
+
+#account_menu {
+  font-weight: bold;
+  position: absolute;
+  top: 75px;
+  right: 10px;
+}
+
+#menu a, #account_menu a, #login a {
+  padding: 2px;
+}
+
+#game_alerts {
+  background: black;
+  background: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 73px;
+  left: 10px;
+  z-index: 100;
+  display: none;
+}
+
+#game_alerts h2 {
+  font-size: 14px;
+  color: #900;
+  margin: 0;
+  padding: 2px;
+  padding-left: 16px;
+  background: url(/images/style/alert_blink.gif) 2px 4px no-repeat;
+}
+
+#game_alerts h2 a:hover {
+  color: #900;
+}
+
+#game_alerts ul {
+  display: none;
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+}
+
+#game_alerts:hover ul {
+  display: block;
+}
+
+#main {
+  position: relative;
+  padding: 30px 30px;
+  background: url(/images/style/border.png) repeat-x top #333;
+}
+
+#maps_listing {
+  margin-right: 230px;
+}
+
+#sidebar {
+  background: #222;
+  width: 200px;
+  padding: 10px;
+  padding-top: 0;
+  float: right;
+}
+
+p.note {
+  color: #666;
+}
+
+table span.note {
+  color: #999;
+}
+
+.flash_alert, .flash_notice, ul.errors, .highlight {
+  padding: 10px;
+}
+
+.flash_alert, ul.errors {
+  background: #600;
+  background: -moz-linear-gradient(0% 100% 90deg, #100, #900);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#900), to(#100));
+  border-right: 1px solid #600;
+  border-left: 1px solid #600;
+  -moz-box-shadow: inset 0 1px 0 0 #900, 0 1px 1px 0 #100;
+  -webkit-box-shadow: inset 0 1px 0 0 #900, 0 1px 1px 0 #100;
+  text-shadow: 0 -1px 1px #333;
+  border-radius: 10px;
+}
+
+.flash_notice, .highlight {
+  background: #660;
+  background: -moz-linear-gradient(0% 100% 90deg, #110, #990);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#990), to(#110));
+  border-right: 1px solid #660;
+  border-left: 1px solid #660;
+  -moz-box-shadow: inset 0 1px 0 0 #990, 0 1px 1px 0 #110;
+  -webkit-box-shadow: inset 0 1px 0 0 #990, 0 1px 1px 0 #110;
+  text-shadow: 0 -1px 1px #333;
+  border-radius: 10px;
+}
+
+div.highlight {
+  margin: 1em 0;
+}
+
+div.highlight form.button_to, div.highlight form.button_to div {
+  display: inline;
+}
+
+ul.errors {
+  padding-left: 30px;
+}
+
+#footer {
+  font-size: 10px;
+  padding: 35px 0 10px 0;
+  text-align: center;
+  background: url(/images/style/border.png) repeat-x top #333;
+}
+
+form th {
+  vertical-align: top;
+  padding-top: 4px;
+  text-align: right;
+  padding-right: 5px;
+}
+
+.dialog {
+  width: 400px;
+  background: black;
+  border: 5px solid rgb(190, 190, 0);
+  padding: 10px;
+}
+
+li.deactivated {
+  color: #666;
+}
+
+li.deactivated a.build_link, a.deactivated {
+  color: #666;
+  text-decoration: none;
+  cursor: text;
+}
+
+#preload {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+}
+
+#preload_grey_mask {
+  background: url(/images/game/target.png);
+}
+
+#new_game_form {
+  float: left;
+}
+
+#preview {
+  width: 438px;
+  margin-bottom: 10px;
+  float: right;
+}
+
+#preview img {
+  border: 4px solid #444;
+}
+
+#preview_dialog {
+  padding-top: 0;
+  width: 438px;
+  height: 407px;
+}
+
+#preview_dialog #preview {
+  float: none;
+}
+
+.listing_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.listing_table th {
+  background: black;
+  font-size: 10px;
+}
+
+.listing_table td, .listing_table th {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.listing_table td.medium {
+  width: 200px;
+  text-align: center;
+}
+
+.listing_table td.small {
+  width: 100px;
+  text-align: center;
+}
+
+.listing_table .last_activity {
+  width: 200px;
+}
+
+#screenshots {
+  text-align: center;
+  margin: 1em 0;
+  padding-left: 2px;
+}
+
+.screenshot_link {
+  display: block;
+  float: left;
+  background: none !important;
+  text-decoration: none;
+  height: 100px;
+  width: 100px;
+  border: 1px solid black;
+  margin: 0 2px 0 0;
+}
+
+.screenshot_link img {
+  opacity: 0.5;
+  filter: alpha(opacity = 50)
+}
+
+.screenshot_link:hover {
+  border-color: white;
+}
+
+.screenshot_link:hover img {
+  opacity: 1;
+  filter: alpha(opacity = 100)
+}
+
+#feature_list li {
+  margin: 1em 0;
+}
+
+h2 span {
+  padding-left: 5px;
+  font-size: 12px;
+}
+
+h4 {
+  clear: both;
+}
+
+.col3 {
+  width: 300px;
+  margin-right: 20px;
+  float: left;
+}
+
+.ui-widget, button {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+}
+
+.ui-widget-overlay {
+  background: black;
+  opacity: 0.25;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+  display: none;
+}
+
+.ui-dialog .ui-dialog-content {
+  color: white;
+}
+
+.ui-dialog {
+  background: black;
+  border-color: rgb(190, 190, 0);
+  border-width: 5px;
+  padding: 0 10px;
+}
+
+/* Default button */
+
+input[type=button], input[type=submit], button {
+  font-size: 11px !important;
+  padding: 2px 8px 3px 8px;
+  background: #333;
+  background: -moz-linear-gradient(0% 100% 90deg, #111, #555);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#555), to(#111));
+  border-top: 0px solid #555;
+  border-right: 1px solid #222;
+  border-bottom: 0px solid #111;
+  border-left: 1px solid #222;
+  -moz-border-radius: 10px; 
+  border-radius: 10px;
+  -webkit-background-clip: padding-box;
+  -moz-box-shadow: inset 0 1px 0 0 #999, 0 1px 1px 0 #111;
+  -webkit-box-shadow: inset 0 1px 0 0 #999, 0 1px 1px 0 #111;
+  text-shadow: 0 -1px 1px #333;
+  color: #DDD;
+  cursor: pointer;
+}
+
+input[type=button]:hover, input[type=submit]:hover, button:hover {
+  background: #353535;
+  background: -moz-linear-gradient(0% 100% 90deg, #333, #777);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#777), to(#333));
+  border-top: 0px solid #575757;
+  border-right: 1px solid #242424;
+  border-bottom: 0px solid #131313;
+  border-left: 1px solid #242424;
+  -moz-box-shadow: inset 0 1px 0 0 #A1A1A1, 0 1px 1px 0 #131313;
+  -webkit-box-shadow: inset 0 1px 0 0 #A1A1A1, 0 1px 1px 0 #131313;
+  text-shadow: 0 -1px 1px #333;
+  color: #DFDFDF;
+}
+
+input[type=button]:active, input[type=submit]:active, button:active {
+  background: #686868;
+  background: -moz-linear-gradient(0% 100% 90deg, #A1A1A1, #353535);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#353535), to(#A1A1A1));
+  border-top: 0px solid #353535;
+  border-right: 1px solid #575757;
+  border-bottom: 0px solid #AAA;
+  border-left: 1px solid #575757;
+  -moz-box-shadow: inset 0 1px 0 0 #CECECE, 0 1px 1px 0 #242424;
+  -webkit-box-shadow: inset 0 1px 0 0 #CECECE, 0 1px 1px 0 #242424;
+  text-shadow: 0 -1px 1px #353535;
+  color: #DFDFDF;
+}
+
+.ui-dialog input[type=button], .ui-dialog input[type=submit], .ui-dialog button {
+  padding: 3px 8px 2px 8px;
+  -moz-box-shadow: inset 0 1px 0 0 #CCC, 0 1px 1px 0 #CCC;
+  -webkit-box-shadow: inset 0 1px 0 0 #CCC, 0 1px 1px 0 #CCC;
+}
+
+.ui-dialog input[type=button]:hover, .ui-dialog input[type=submit]:hover, .ui-dialog button:hover {
+  -moz-box-shadow: inset 0 1px 0 0 #CCC, 0 1px 1px 0 #CCC;
+  -webkit-box-shadow: inset 0 1px 0 0 #CCC, 0 1px 1px 0 #CCC;
+}
+
+/* Main button differences */
+
+input[type=button].main, input[type=submit].main, button.main {
+  font-weight: bold;
+  background: #500;
+  background: -moz-linear-gradient(0% 100% 90deg, #300, #700);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#700), to(#300));
+  border-top: 0px solid #700;
+  border-right: 1px solid #500;
+  border-bottom: 0px solid #300;
+  border-left: 1px solid #500;
+  -moz-box-shadow: inset 0 1px 0 0 #B00, 0 1px 1px 0 #111;
+  -webkit-box-shadow: inset 0 1px 0 0 #B00, 0 1px 1px 0 #111;
+  text-shadow: 0 -1px 1px #300;
+  color: #DDD;
+}
+
+input[type=button].main:hover, input[type=submit].main:hover, button.main:hover {
+  background: #700;
+  background: -moz-linear-gradient(0% 100% 90deg, #500, #900);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#900), to(#500));
+  border-top: 0px solid #900;
+  border-right: 1px solid #700;
+  border-bottom: 0px solid #500;
+  border-left: 1px solid #700;
+  -moz-box-shadow: inset 0 1px 0 0 #D00, 0 1px 1px 0 #111;
+  -webkit-box-shadow: inset 0 1px 0 0 #D00, 0 1px 1px 0 #111;
+  text-shadow: 0 -1px 1px #300;
+  color: #DFDFDF;
+}
+
+input[type=button].main:active, input[type=submit].main:active, button.main:active {
+  background: #700;
+  background: -moz-linear-gradient(0% 100% 90deg, #900, #500);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#500), to(#900));
+  border-top: 0px solid #500;
+  border-right: 1px solid #700;
+  border-bottom: 0px solid #900;
+  border-left: 1px solid #700;
+  -moz-box-shadow: inset 0 1px 0 0 #F44, 0 1px 1px 0 #111;
+  -webkit-box-shadow: inset 0 1px 0 0 #F44, 0 1px 1px 0 #111;
+  text-shadow: 0 -1px 1px #300;
+  color: #DFDFDF;
+}
+
+.ui-dialog input[type=button].main, .ui-dialog input[type=submit].main, .ui-dialog button.main {
+  padding: 3px 8px 2px 8px;
+  -moz-box-shadow: inset 0 1px 0 0 #CCC, 0 1px 1px 0 #CCC;
+  -webkit-box-shadow: inset 0 1px 0 0 #CCC, 0 1px 1px 0 #CCC;
+}
+
+.ui-dialog input[type=button].main:hover, .ui-dialog input[type=submit].main:hover, .ui-dialog button.main:hover {
+  -moz-box-shadow: inset 0 1px 0 0 #CCC, 0 1px 1px 0 #CCC;
+  -webkit-box-shadow: inset 0 1px 0 0 #CCC, 0 1px 1px 0 #CCC;
+}
+
+/* Disabled differences */
+
+input[type=button][disabled], input[type=button][disabled]:hover, input[type=button][disabled]:active,
+input[type=submit][disabled], input[type=submit][disabled]:hover, input[type=submit][disabled]:active,
+button[disabled], button[disabled]:hover, button[disabled]:active {
+  font-size: 11px !important;
+  padding: 2px 8px 3px 8px;
+  background: #333;
+  background: -moz-linear-gradient(0% 100% 90deg, #111, #555);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#555), to(#111));
+  border-top: 0px solid #555;
+  border-right: 1px solid #222;
+  border-bottom: 0px solid #111;
+  border-left: 1px solid #222;
+  -moz-border-radius: 10px; 
+  border-radius: 10px;
+  -webkit-background-clip: padding-box;
+  -moz-box-shadow: inset 0 1px 0 0 #999, 0 1px 1px 0 #111;
+  -webkit-box-shadow: inset 0 1px 0 0 #999, 0 1px 1px 0 #111;
+  text-shadow: 0 -1px 1px #333;
+  color: #DDD;
+  cursor: default;
+  opacity: 0.5;
+}
+
+input.main[type=button][disabled], input[type=button][disabled].main:hover, input[type=button][disabled].main:active,
+input.main[type=submit][disabled], input[type=submit][disabled].main:hover, input[type=submit][disabled].main:active,
+button.main[disabled], button[disabled].main:hover, button[disabled].main:active {
+  padding: 2px 8px 2px 8px;
+  font-weight: bold;
+  background: #500;
+  background: -moz-linear-gradient(0% 100% 90deg, #300, #700);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#700), to(#300));
+  border-top: 0px solid #700;
+  border-right: 1px solid #500;
+  border-bottom: 0px solid #300;
+  border-left: 1px solid #500;
+  -moz-box-shadow: inset 0 1px 0 0 #B00, 0 1px 1px 0 #111;
+  -webkit-box-shadow: inset 0 1px 0 0 #B00, 0 1px 1px 0 #111;
+  text-shadow: 0 -1px 1px #300;
+  color: #DDD;
+}
+
+button::-moz-focus-inner, input[type=button]::-moz-focus-inner, input[type=submit]::-moz-focus-inner {
+  border: 0;
+}
+
+button:focus, input[type=button]:focus, input[type=submit]:focus {
+  outline: none;
+  text-decoration: underline;
+}
+
+.section {
+  text-align: center;
+}
+
+#ec_autocomplete {
+  background: #333;
+  padding: 4px;
+  border: 1px solid white;
+}
+
+#ec_autocomplete a {
+  display: block;
+  padding: 2px;
+  border-bottom: 1px solid #222;
+}
+
+#ec_autocomplete a:hover, #ec_autocomplete a.cursor {
+  color: white !important;
+}
+
+tr.unread td {
+  background: #444;
+}
+
+.message {
+  background: #444;
+  margin: 1em 0;
+  padding: 10px;
+}
+
+#global_chat {
+  background: #222;
+  padding: 0 10px;
+  overflow: auto;
+  height: 300px;
+}
+
+#global_chat p strong {
+  color: #600;
+}
+
+#global_chat p span {
+  color: #555;
+  font-size: 10px;
+  padding-left: 4px;
+}
+
+#global_chat_message_message {
+  padding: 2px 4px;
+  width: 953px;
+}
+
+#achievement {
+  width: 300px;
+  height: 80px;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  padding: 10px;
+  background: rgb(32, 32, 32);
+  background: rgba(32, 32, 32, 0.8);
+  border: 1px solid white;
+  box-shadow: 0 2px 6px 0px white;
+  -moz-box-shadow: 0 2px 6px 0px white;
+  -webkit-box-shadow: 0 2px 6px 0px white;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  display: none;
+}
+
+#achievement img {
+  width: 80px;
+  height: 80px;
+  margin-right: 10px;
+  background-color: #444;
+  float: left;
+}
+
+#achievement h3 {
+  font-size: 14px;
+  margin-top: 0;
+}
+
+#achievement_description {
+  position: absolute;
+  background: #ff9;
+  background: rgba(255, 255, 175, 0.9);
+  border: 1px solid black;
+  color: black;
+  padding: 4px;
+  display: none;
+  text-align: center;
+  font-size: 11px;
+}
+
+#go_away {
+  display: none;
+}

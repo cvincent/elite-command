@@ -1,0 +1,30 @@
+<% page = page.try(:to_i) || 0 %>
+<% total = collection.count %>
+<% per = 10 if !per %>
+<% item_plural = 'items' if !item_plural %>
+<% base_url = '' if !base_url %>
+<% query_sep = base_url.index('?') ? '&' : '?' %>
+
+<div class="paginator">
+  <p>Viewing <%= page * per + 1 %>-<%= (last_idx = page * per + per) > total ? total : last_idx %> of <%= total %> <%= item_plural %>.</p>
+  
+  <% if total > per %>
+    <p>
+      <% if page > 0 %>
+        <%= link_to 'First Page', base_url %>
+        <%= link_to 'Previous', base_url + "#{query_sep}page=#{page - 1}" %>
+      <% else %>
+        First Page
+        Previous
+      <% end %>
+      |
+      <% if page * per + per < total %>
+        <%= link_to 'Next', base_url + "#{query_sep}page=#{page + 1}" %>
+        <%= link_to 'Last Page', base_url + "#{query_sep}page=#{(total - 1) / per}" %>
+      <% else %>
+        Next
+        Last Page
+      <% end %>
+    </p>
+  <% end %>
+</div>

@@ -1,0 +1,580 @@
+#game {
+  position: relative;
+  margin-bottom: 80px;
+}
+
+#map_frame {
+  position: absolute;
+  top: 30px;
+  left: -15px;
+  width: 681px;
+  height: 553px;
+  background: url(/images/style/map-border.png);
+  z-index: 99;
+}
+
+#map {
+  background: black;
+  width: 656px;
+  height: 528px;
+  position: relative;
+  top: 40px;
+  left: 0;
+  border-width: 0;
+}
+
+#map.fullscreen, #map_event_catcher.fullscreen {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 30px !important;
+  bottom: 30px !important;
+  width: auto !important;
+  height: auto !important;
+  z-index: 10000 !important;
+}
+#map_event_catcher.fullscreen {
+  z-index: 10001 !important;
+}
+
+#map.shade div {
+  opacity: 0.5;
+  filter: alpha(opacity = 50);
+}
+
+#map.shade div.no_shade {
+  opacity: 1;
+  filter: alpha(opacity = 100);
+}
+
+#loading_splash {
+  background: black url("/images/game/loading_splash.gif") no-repeat center center;
+  width: 656px;
+  height: 528px;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  z-index: 99;
+}
+
+#scroll_message {
+  font-size: 12px;
+  position: absolute;
+  left: 4px;
+  bottom: 2px;
+  display: none;
+}
+
+#map_event_catcher:hover #scroll_message {
+  display: block;
+}
+
+#map_event_catcher.fullscreen:hover #scroll_message {
+  display: none;
+}
+
+#status {
+  position: absolute;
+  top: 0px;
+  left: -15px;
+  height: 16px;
+  width: 964px;
+  font-size: 12px;
+  text-shadow: 0 -1px 1px #222;
+  color: #eee;
+  line-height: 16px;
+  padding: 10px 15px;
+  background: url(/images/style/status-plate.png);
+}
+
+#status.fullscreen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: auto;
+  padding-top: 7px;
+  margin-left: 10px;
+  z-index: 10002;
+  background: url(/images/style/status-plate-fullscreen.jpg) repeat-x;
+}
+
+#status.fullscreen #fullscreen_button {
+  background-image: url(/images/style/minimize.png);
+}
+
+#status div {
+  float: left;
+  margin-right: 40px;
+}
+
+#status #fullscreen_button {
+  background: #333 url(/images/style/fullscreen.png) center no-repeat;
+  width: 32px;
+}
+#status #fullscreen_button:hover {
+  background-color: #444;
+}
+#status #fullscreen_button:active {
+  background-color: #555;
+}
+
+ul#game_options {
+  padding: 10px;
+  list-style: none;
+  margin: 0;
+  position: absolute;
+  width: 200px;
+  z-index: 9999999;
+  background: black;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  box-shadow: 0 2px 8px 0px rgba(255, 255, 255, 0.95);
+  -moz-box-shadow: 0 2px 8px 0px rgba(255, 255, 255, 0.95);
+  -webkit-box-shadow: 0 2px 8px 0px rgba(255, 255, 255, 0.95);
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+ul#game_options.fullscreen {
+  position: fixed;
+}
+ul#game_options a {
+  display: block;
+  background: none;
+}
+
+#status #game_options_button {
+  background: #333 url(/images/style/options.png) center no-repeat;
+  width: 32px;
+}
+#status #game_options_button:hover {
+  background-color: #444;
+}
+#status #game_options_button:active {
+  background-color: #555;
+}
+
+#status #help_button {
+  float: right;
+  text-align: right;
+  margin: 0;
+  margin-top: -4px;
+  margin-right: 6px;
+}
+
+#status #help_button input {
+  font-weight: bold !important;
+}
+
+#status #end_turn_button {
+  float: right;
+  text-align: right;
+  margin: 0;
+  margin-top: -4px;
+  margin-right: -5px;
+}
+
+#chat {
+  background: #222;
+  position: absolute;
+  top: 40px;
+  left: 676px;
+  width: 288px;
+}
+
+#chat_frame {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 313px;
+  height: 306px;
+  background: url(/images/style/chat-border.png);
+}
+
+#chat_log {
+  height: 266px;
+  padding: 10px;
+  overflow: hidden;
+}
+
+#chat_field {
+  margin-left: -8px;
+  margin-top: 10px;
+  width: 300px;
+  height: 15px;
+}
+
+#chat_field:focus {
+  outline: none;
+}
+
+#chat form input {
+  height: 16px;
+  padding: 1px;
+  border-width: 2px;
+}
+
+#players, #unit_options, #replay_controls {
+  color: #ddd;
+  padding: 10px;
+  padding-right: 15px;
+  background: #555;
+  position: absolute;
+  top: 358px;
+  left: 667px;
+  width: 288px;
+  height: 205px;
+  background: url(/images/style/players-plate.png);
+}
+
+#players h3, #unit_options h3, #replay_controls h3 {
+  height: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+#replay_controls p {
+  text-align: center;
+}
+
+#replay_controls #replay_spinner {
+  position: relative;
+  top: 2px;
+  left: 4px;
+}
+
+#replay_controls #replay_spinner img {
+  height: 14px;
+}
+
+#players div {
+  padding: 2px 0 2px 0;
+  height: 16px;
+  border-left: 4px solid black;
+  padding-left: 10px;
+}
+
+#players div a {
+  font-size: 16px;
+  line-height: 16px;
+  text-shadow: 0 -1px 1px #111;
+  color: #eee;
+  background: none;
+}
+
+#players div a:hover {
+  color: #fff;
+}
+
+#players div.current {
+  background-color: #666 !important;
+}
+
+#players div.defeated {
+  background: url(/images/game/defeated.png) 10px 2px no-repeat;
+  text-indent: 22px;
+}
+
+#players div.peace {
+  background: url(/images/game/peace.png) 10px 2px no-repeat;
+  text-indent: 22px;
+}
+
+#chat_log div {
+  padding: 4px 0 4px 32px;
+  border-left: 4px solid black;
+}
+
+#chat_log div.chat_message {
+  text-indent: -24px;
+}
+
+#chat_log div.info_message {
+  color: #ccc;
+  font-size: 12px;
+  padding: 6px 0 6px 4px;
+  text-align: center;
+}
+
+#players div.player_1, #chat_log div.player_1 {
+  border-left-color: red;
+}
+
+#players div.player_2, #chat_log div.player_2 {
+  border-left-color: #44F;
+}
+
+#players div.player_3, #chat_log div.player_3 {
+  border-left-color: green;
+}
+
+#players div.player_4, #chat_log div.player_4 {
+  border-left-color: orange;
+}
+
+#players div.player_5, #chat_log div.player_5 {
+  border-left-color: pink;
+}
+
+#players div.player_6, #chat_log div.player_6 {
+  border-left-color: yellow;
+}
+
+#player_turn {
+  background: black;
+  font-weight: bold;
+}
+
+#player_turn.player_1 {
+  color: red;
+}
+
+#player_turn.player_2 {
+  color: #44F;
+}
+
+#player_turn.player_3 {
+  color: green;
+}
+
+#player_turn.player_4 {
+  color: orange;
+}
+
+#player_turn.player_5 {
+  color: pink;
+}
+
+#player_turn.player_6 {
+  color: yellow;
+}
+
+#players #player_options {
+  background: #666;
+  border: none;
+  height: auto;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+#fullscreen_bottom_plate {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: 30px;
+  line-height: 30px;
+  padding: 0;
+  padding-right: 10px;
+  text-align: right;
+  z-index: 10002;
+  background: url(/images/style/status-plate-fullscreen.jpg) repeat-x;
+}
+#fullscreen_bottom_plate.fullscreen {
+  display: block;
+}
+
+#players #player_options.fullscreen {
+  position: fixed;
+  right: 10px;
+  bottom: 0;
+  width: 288px;
+  height: 30px;
+  line-height: 28px;
+  z-index: 10003;
+  text-align: right;
+  padding: 0;
+  margin: 0;
+  background: none;
+}
+
+#main_unit_options.fullscreen, #building_buttons.fullscreen, #replay_buttons.fullscreen {
+  position: fixed;
+  left: 10px;
+  bottom: 0;
+  width: 300px;
+  height: 30px;
+  line-height: 26px;
+  z-index: 10003;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  background: none;
+}
+#building_buttons.fullscreen {
+  left: 300px;
+  right: 300px;
+  width: auto;
+  text-align: center;
+}
+
+#player_options div {
+  font-size: 12px;
+}
+
+#players #player_options div {
+  border: none;
+  padding: 0;
+  height: auto;
+}
+
+#over_time_notice {
+  text-indent: 6px;
+}
+
+.overtime {
+  color: #600;
+}
+
+#attack_dialog_sprites {
+  height: 34px;
+  margin: 1em 0;
+  clear: both;
+}
+
+#attack_dialog_a_sprite {
+  width: 32px;
+  height: 34px;
+  float: left;
+}
+
+#attack_dialog_d_sprite {
+  width: 32px;
+  height: 34px;
+  float: right;
+}
+
+.attack_dialog_table {
+  margin: auto;
+  margin-top: -46px;
+}
+
+.attack_dialog_table td {
+  text-align: center;
+  width: 50px;
+}
+
+.attack_dialog_table th {
+  text-align: right;
+}
+
+.attack_dialog_table .header_row th {
+  text-align: center;
+}
+
+#unit_stats_sprite {
+  width: 32px;
+  height: 32px;
+  background: #666;
+  float: left;
+}
+
+#unit_stats_list {
+  padding-left: 64px;
+}
+
+#loaded_units_dialog_sprites {
+  height: 34px;
+  clear: both;
+}
+
+#loaded_units_dialog_sprites a.loaded_unit_sprite {
+  background: #666;
+  float: left;
+  position: relative;
+  border: 1px solid white;
+  width: 32px;
+  height: 34px;
+  margin-right: 1px;
+  padding: 0 1px;
+}
+
+#loaded_units_dialog_sprites a.loaded_unit_sprite:hover {
+  border: 1px solid #600;
+}
+
+#loaded_units_dialog_sprites a.loaded_unit_sprite:focus {
+  outline: none;
+}
+
+#loaded_units_dialog_sprites a.loaded_unit_sprite div {
+  width: 32px;
+  height: 34px;
+}
+
+/* Show page */
+
+#map_buttons {
+  margin: 10px 0;
+  height: 22px;
+}
+
+#map_buttons #start_game_button, #map_buttons #clone_map_button {
+  float: left;
+}
+
+.subscribe_buttons {
+  text-align: center;
+}
+
+.subscribe_buttons input.main {
+  font-size: 20px !important;
+}
+
+#faq {
+  background: #444;
+  padding: 20px 30px;
+  margin: 10px 0;
+}
+
+#faq h4 {
+  margin-top: 40px;
+}
+
+#faq p {
+  margin-bottom: 40px;
+}
+
+.dialog_tabs.in_page {
+  margin: 1em 0;
+}
+
+.dialog_tabs a {
+  border-top: 0px solid #555;
+  border-right: 1px solid #222;
+  border-bottom: none;
+  border-left: 1px solid #222;
+  padding: 3px 6px;
+  margin-right: 0;
+  border-radius: 4px;
+  background: #333;
+  background: -moz-linear-gradient(0% 100% 90deg, #111, #555);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#555), to(#111));
+  text-shadow: 0 -1px 1px #333;
+  color: #DDD;
+  -webkit-background-clip: padding-box;
+  -moz-box-shadow: inset 0 1px 0 0 #999, 0 1px 1px 0 #111;
+  -webkit-box-shadow: inset 0 1px 0 0 #999, 0 1px 1px 0 #111;
+  outline: none;
+}
+
+.dialog_tabs a.current_tab {
+  background: #500;
+  background: -moz-linear-gradient(0% 100% 90deg, #100, #700);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#700), to(#100));
+  border-top: 0px solid #700;
+  border-right: 1px solid #100;
+  border-bottom: none;
+  border-left: 1px solid #100;
+  -moz-box-shadow: inset 0 1px 0 0 #B00, 0 1px 1px 0 #111;
+  -webkit-box-shadow: inset 0 1px 0 0 #B00, 0 1px 1px 0 #111;
+  text-shadow: 0 -1px 1px #300;
+  color: #DDD;
+  outline: none;
+}
+
+.tab_content {
+  padding: 0 10px;
+}

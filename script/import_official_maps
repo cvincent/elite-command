@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+mongoimport -d war_production -c maps --file ./official_maps.mongo

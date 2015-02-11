@@ -1,0 +1,125 @@
+<h2>Why Subscribe?</h2>
+
+<div style="float: left; width: 430px; margin-right: 30px;">
+  <table class="listing_table" style="width: 430px;">
+    <tr>
+      <th style="width: 100px;">&nbsp;</th>
+      <th>Free Users</th>
+      <th>Subscribers</th>
+    </tr>
+
+    <tr>
+      <th>Units</th>
+      <td class="medium"><%= image_tag '/images/free_units.png' %></td>
+      <td class="medium"><%= image_tag '/images/premium_units.png' %></td>
+    </tr>
+
+    <tr>
+      <th>Maps</th>
+      <td class="medium"><%= Map.free.count %> small maps</td>
+      <td class="medium"><%= number_with_delimiter(Map.count) %> and counting, including huge, epic maps!</td>
+    </tr>
+
+    <tr>
+      <th>Map Editor</th>
+      <td class="medium">Nope</td>
+      <td class="medium">Of course!</td>
+    </tr>
+
+    <tr>
+      <th>Players</th>
+      <td class="medium">2-player games only</td>
+      <td class="medium">Up to 6 players at a time!</td>
+    </tr>
+
+    <tr>
+      <th>Feeling</th>
+      <td class="medium">Empty inside :(</td>
+      <td class="medium">Warm and fuzzy! :D</td>
+    </tr>
+
+    <% lowest_monthly = PAYPAL_SUBS.map { |k, s| [s[:identifier], s[:price] / s[:period].to_f] } %>
+    <% lowest_monthly = lowest_monthly.inject { |s, memo| s[1] < memo[1] ? s : memo } %>
+    <tr>
+      <th>Price</th>
+      <td class="medium">Free (ad-supported)</td>
+      <td class="medium">As low as <%= number_to_currency(lowest_monthly[1]) %>/mo!*</td>
+    </tr>
+  </table>
+
+  <p class="note">*With a <%= lowest_monthly[0].downcase %> subscription.</p>
+</div>
+
+<p>Elite Command is created and maintained by two guys: a developer and a pixel artist. We put our passion into this game and strive to make it as much fun as possible. A small subscription fee helps ensure we can keep going.</p>
+
+<p>But besides feeling warm and fuzzy for supporting indie game developers, what do you get?</p>
+
+<p>To put it briefly: more game! More units, more maps, more players, and access to the very rad map editor.</p>
+
+<p>Are you sold? We thought you might be.</p>
+
+<h4 style="clear: none">Subscription Plans</h4>
+
+<% if current_user %>
+  <table class="listing_table" style="clear: none; width: 500px">
+    <tr>
+      <th>Plan</th>
+      <th>Price</th>
+      <th>&nbsp;</th>
+    </tr>
+
+    <% if current_user.account_type == 'subscriber' and current_user.subscription_name != '1-Week Trial' %>
+      <p>Due to restrictions in place by PayPal, we are unfortunately unable to allow you to switch to a different subscription plan automatically. However, if you click the appropriate email link, or email us at <%= mail_to('support@elitecommand.net', nil, :subject => "Switch #{current_user.username}'s subscription") %>, we will handle the change with you within the next 2 business days.</p>
+    <% end %>
+
+    <% [:monthly, :quarterly, :yearly].each do |plan| %>
+      <% sub = PAYPAL_SUBS[plan] %>
+      <tr>
+        <th><%= sub[:identifier] %><%= ' (Best deal!)' if plan == :yearly %></th>
+        <td class="medium">
+          <%= number_to_currency(sub[:price], :precision => 0) %>
+          <% if plan != :monthly %>
+            (<%= number_to_currency(sub[:price] / (plan == :quarterly ? 3.0 : 12.0)) %>/month)
+          <% end %>
+        </td>
+        <td class="small">
+          <% if current_user.subscription_name == sub[:identifier] %>
+            <%= paypal_sub_button(plan, current_user, :unsubscribe) %>
+          <% elsif current_user.account_type == 'subscriber' and current_user.subscription_name != '1-Week Trial' %>
+            <%= mail_to('support@elitecommand.net', 'Email us to switch subscription', :subject => "Switch #{current_user.username} to #{sub[:identifier]}") %>
+          <% else %>
+            <%= paypal_sub_button(plan, current_user) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <p>Please sign in to see subscription details.</p>
+<% end %>
+
+<div class="clear"></div>
+
+
+<div id="faq">
+  <h3>Frequently Asked Questions</h3>
+
+  <h4>Where does the money go?</h4>
+
+  <p>Ads can't cover everything. Subscriptions pay for the servers, bandwidth, and monitoring to ensure the game is playable. It also keeps food in our stomachs so we can stick around to support the users and extend the game with new features.</p>
+
+
+  <h4>Can I play with my friends who don't want to pay?</h4>
+
+  <p>Soon! We're working on releasing private games where you can invite specific people to play with you. Free users can play on any map and with all the units in the game if they are invited to a subscriber's private game.</p>
+
+
+  <h4>Will the game continue to be updated?</h4>
+
+  <p>We have a long list of cool features to improve the game and make it more fun, and we release updates frequently. We are also very quick to answer any questions or address any issues found by our users. As a matter of fact, we play a lot of Elite Command ourselves, and want very much to see it succeed.</p>
+
+
+  <h4>What am I waiting for?</h4>
+
+  <p>We're not sure. Just subscribe already!</p>
+</div>

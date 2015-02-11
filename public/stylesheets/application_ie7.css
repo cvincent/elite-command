@@ -1,0 +1,13 @@
+#chat form {
+  margin: 0;
+  padding: 0;
+}
+
+#chat_field {
+  margin: 0;
+  margin-left: 7px;
+}
+
+#go_away {
+  display: block !important;
+}

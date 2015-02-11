@@ -1,0 +1,228 @@
+<h2>
+  <%= @user.username %>
+  <% if current_user == @user %>
+    <span>[<%= link_to 'edit settings', edit_user_url(@user) %>]</span>
+    <span>[<%= link_to 'private messages', messages_url %>]</span>
+  <% end %>
+</h2>
+
+<% if params[:auth] %>
+  <div style="margin-bottom: 10px" class="flash_notice">
+    Thank you for subscribing! Your payment has been processed. You will receive two emails shortly: one with your receipt, and one one to confirm when we have activated your subscription. If you do not receive your confirmation within 24 hours, please contact <%= link_to 'support@elitecommand.net', 'mailto:support@elitecommand.net' %>.
+  </div>
+<% end %>
+
+<!--
+  <% if current_user == @user %>
+    <div style="float: right; width: 200px; background: #222; padding: 10px;">
+      <h3>Your Subscription</h3>
+      <% if @user.account_type == 'free' %>
+        <p>You are not currently subscribed.</p>
+        <div style="text-align: center">
+          <%= button_to 'Learn More', url_for(:controller => :home, :action => :why_subscribe), :class => :main, :method => :get %>
+        </div>
+      <% else %>
+        <p>You currently have a <%= @user.subscription_name %> subscription.</p>
+        <% unless @user.subscription_name == 'Lifetime' %>
+          <div style="text-align: center">
+            <%= button_to 'Manage Subscription', url_for(:controller => :home, :action => :why_subscribe), :method => :get %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+-->
+
+<p>
+  <% if current_user and @user != current_user %>
+    <%= button_to_url 'Send Message', new_message_url(to_user_id: @user.id.to_s), class: 'main' %>
+  <% end %>
+</p>
+
+<div class="dialog_tabs in_page">
+  <%= link_to 'Achievements & Trophies', user_url(@user), class: (params[:history] ? '' : 'current_tab') %>
+  <%= link_to 'History', user_url(@user, history: true), class: (params[:history] ? 'current_tab' : '') %>
+</div>
+
+<div id="sidebar">
+  <h3>Vitals</h3>
+
+  <p>
+    Joined <%= @user.created_at.strftime('%B %e, %Y') %><br/>
+
+    <!-- Account type: <%= @user.account_type.humanize %>
+    <% if current_user == @user and current_user.account_type == 'free' %>
+      [<%= link_to 'Upgrade!', :controller => :home, :action => :why_subscribe %>]
+    <% end %><br/>-->
+
+    <% if @user.donated_ever? %>
+      Donated <%= @user.donations.last.created_at.strftime('%B %e, %Y') %><br/>
+    <% else %>
+      Never donated<br/>
+    <% end %>
+
+    <%= pluralize(@user.games_played.to_i, 'game') %> played<br/>
+    <%= pluralize(@user.games_won.to_i, 'game') %> won<br/>
+    <%= pluralize(@user.games_lost.to_i, 'game') %> lost<br/>
+    <%= pluralize(@user.games_drawn.to_i, 'game') %> ended in a draw<br/>
+    <%= @user.rating %> rating
+  </p>
+
+  <h3>Current Games</h3>
+
+  <% current_games = (current_user == @user ? @user.current_games : @user.current_games.visible_to_public) %>
+  <% if current_games.count > 0 %>
+    <ul>
+      <% current_games.each do |g| %>
+        <li>
+          <% if g.current_user == @user and @user == current_user %>*<% end %>
+          <%= link_to g.name, game_url(g) %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p><%= @user.username %> is not currently in any games.</p>
+  <% end %>
+</div>
+
+<% if !params[:history] %>
+  <h3>Achievements (<%= @user.tiered_achievements.size %>)</h3>
+
+  <% if @user.tiered_achievements.size > 0 %>
+    <ul id="achievements" class="jcarousel-skin-tango">
+      <% @user.tiered_achievements.each do |a| %>
+        <li class="achievement" ec-description="<%= a[:class].description %>">
+          <%= image_tag("achievements/#{a[:class].name}_large.png") %>
+          <h4>
+            <%= a[:class].display_name %>
+            <% if a[:tier] > 1 %>(x<%= a[:tier] %>)<% end %>
+          </h4>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p><%= @user.username %> has not yet earned any achievements.</p>
+  <% end %>
+
+  <h3>Trophies (<%= @user.trophies.size %>)</h3>
+
+  <p>Trophies are awarded once for each player you defeat one-on-one.</p>
+
+  <% if @user.trophies.size > 0 %>
+    <ul id="trophies" class="jcarousel-skin-tango">
+      <% @user.trophies.each do |t| %>
+        <li>
+          <%= image_tag('achievements/Trophy_large.png') %>
+          <h4><%= t.defeated_username %></h4>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p><%= @user.username %> has not yet earned any trophies.</p>
+  <% end %>
+
+  <script type="text/javascript">
+    $(function() {
+      $('#achievements').jcarousel({
+        visible: 5, scroll: 5
+      });
+      $('#trophies').jcarousel({
+        visible: 5, scroll: 5
+      });
+    });
+  </script>
+<% else %>
+  <h3>History</h3>
+
+  <div style="width: 700px">
+    <table class="listing_table">
+      <tr>
+        <th>Name</th>
+        <th>Map</th>
+        <th>Players</th>
+        <th>Result</th>
+      </tr>
+      <% per_page = 10 %>
+      <% @user.finished_games.desc(:turn_started_at).limit(per_page).skip(params[:page] * per_page).each do |g| %>
+        <tr>
+          <td class="medium"><%= link_to g.name, game_url(g) %></td>
+          <td class="medium">
+            <%= link_to g.map.name, map_url(g.map) %>
+            (<%= link_to_function('preview', "show_preview('#{g.map.img_medium || '/images/game/map_preview_placeholder.jpg'}')") %>)
+          </td>
+          <td class="medium">
+            <%=
+              (g.users - [@user]).map do |u|
+                user_link(u)
+              end.join(', ').html_safe
+            %>
+          </td>
+          <td class="small">
+            <% if g.status == 'draw' %>
+              Draw
+            <% else %>
+              <%= g.winner.to_s == @user.id.to_s ? 'Win' : 'Loss' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+
+    <%= render :partial => 'layouts/paginator', :locals => { :collection => @user.finished_games, :page => params[:page], :per => per_page, :item_plural => 'games', :base_url => user_url(history: true) } %>
+  </div>
+<% end %>
+
+<div class="clear"></div>
+
+<div id="preview_dialog" style="display: none" class="dialog">
+  <h3>Map preview (press esc to close)</h3>
+  <div id="preview"></div>
+</div>
+
+<script>
+  var show_preview = null;
+
+  $(document).ready(function() {
+    show_preview = function(src) {
+      var img = src
+      var pre = $('#preview img')
+      
+      if (pre.length == 0) {
+        $('#preview').append('<img src="' + img + '"/>')
+      } else {
+        pre.attr('src', img)
+      }
+      
+      var dialog = $('#preview_dialog')
+      dialog.dialog({ modal: true, closeOnEscape: true, resizable: false, autoOpen: true, width: 465 });
+    }
+
+    var within = true;
+
+    $('.achievement').hover(
+      function(ev) {
+        $('#achievement_description').show()
+          .text($(ev.target).attr('ec-description'));
+        $('body').css('cursor', 'help');
+
+        ev.stopPropagation();
+      },
+      function(ev) {
+        $('#achievement_description').hide();
+        $('body').css('cursor', 'default');
+
+        ev.stopPropagation();
+      }
+    );
+
+    $('.achievement').mousemove(function(ev) {
+      var width = parseInt($('#achievement_description').css('width'));
+
+      $('#achievement_description')
+        .css('left', ev.pageX - (width / 2))
+        .css('top', ev.pageY + 10);
+    });
+
+    $('body').append('<div id="achievement_description"></div>');
+  });
+</script>

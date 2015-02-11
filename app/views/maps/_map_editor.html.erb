@@ -1,0 +1,205 @@
+<div id="tile_selector">
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 0" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) 0 0"></a></p>
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 1" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) -32px 0"></a></p>
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 2" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) -64px 0"></a></p>
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 3" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) -96px 0"></a></p>
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 4" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) -128px 0"></a></p>
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 5" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) -160px 0"></a></p>
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 6" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) -192px 0"></a></p>
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 7" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) -224px 0"></a></p>
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 8" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) -256px 0"></a></p>
+  <p><a href="#" onclick="Editor.mode = 'tile'; Editor.draw_tile = 9" style="display: block; height: 34px; width: 32px; background: url(/images/game/tileset.png) -288px 0"></a></p>
+</div>
+
+<div id="object_selector">
+  <p>
+    <select id="selected_player" onchange="Editor.set_selected_player()">
+      <option value="-1">Neutral</option>
+      <option value="0">Red</option>
+      <option value="1">Blue</option>
+      <option value="2">Green</option>
+      <option value="3">Orange</option>
+      <option value="4">Pink</option>
+      <option value="5">Yellow</option>
+    </select>
+  </p>
+  
+  <p><a href="#" class="player_button" onclick="Editor.mode = 'Base'" style="display: block; height: 34px; width: 32px; background: url(/images/game/bases.png) 0 0"></a></p>
+  <p><a href="#" class="player_button" onclick="Editor.mode = 'Airfield'" style="display: block; height: 34px; width: 32px; background: url(/images/game/bases.png) -32px 0"></a></p>
+  <p><a href="#" class="player_button" onclick="Editor.mode = 'Seaport'" style="display: block; height: 34px; width: 32px; background: url(/images/game/bases.png) -64px 0"></a></p>
+  
+  <% i = 0 %>
+  <% UnitDefinitions.each do |name, stats| %>
+    <p><a href="#" class="player_button" onclick='Editor.mode = <%= name.to_s.inspect %>' style="display: block; height: 34px; width: 32px; background: url(/images/game/units.png) -<%= i * 64 %>px 0"></a></p>
+    <% i += 1 %>
+  <% end %>
+
+  <p><a href="#" class="player_button" onclick="Editor.mode = 'delete'">Delete</a></p>
+</div>
+
+<div id="resizer">
+  <p>Adjust map size:</p>
+  <% form_tag '#', :onsubmit => 'resize(); return false;' do %>
+    <table cellspacing="0">
+      <tr>
+        <td>Top:</td>
+        <td><%= text_field_tag :resize_top, 0 %></td>
+      </tr>
+      <tr>
+        <td>Right:</td>
+        <td><%= text_field_tag :resize_right, 0 %></td>
+      </tr>
+      <tr>
+        <td>Bottom:</td>
+        <td><%= text_field_tag :resize_bottom, 0 %></td>
+      </tr>
+      <tr>
+        <td>Left:</td>
+        <td><%= text_field_tag :resize_left, 0 %></td>
+      </tr>
+      <tr>
+        <td colspan="2"><%= submit_tag :Resize %></td>
+      </tr>
+    </table>
+  <% end %>
+</div>
+
+<div style="margin-top: 15px">
+  <% form_for @map do |f| %>
+    <%= f.hidden_field :tiles, :id => 'map_data_field', :value => @map.tiles.to_json %>
+    <%= f.hidden_field :bases, :id => 'bases_field', :value => @map.bases.to_json %>
+    <%= f.hidden_field :units, :id => 'units_field', :value => @map.units.to_json %>
+    
+    <table>
+      <tr>
+        <th>Name:</th>
+        <td><%= f.text_field :name %></td>
+      </tr>
+      <tr>
+        <th>Description:</th>
+        <td><%= f.text_field :description %></td>
+      </tr>
+      <tr>
+        <th>Starting credits:</th>
+        <td><%= f.text_field :starting_credits %></td>
+      </tr>
+      <tr>
+        <th>Status:</th>
+        <td><%= f.select :status, [['Unpublished', 'unpublished'], ['Published', 'published']] %></td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: right"><%= f.submit 'Save', :onclick => 'return Editor.serialize()' %></td>
+      </tr>
+    </table>
+  <% end %>
+</div>
+
+<%= render :partial => 'map_loader' %>
+
+<script>
+  var Editor = new MapEditor(Game)
+
+  function resize() {
+    var top = parseInt($('#resize_top').val())
+    var right = parseInt($('#resize_right').val())
+    var bottom = parseInt($('#resize_bottom').val())
+    var left = parseInt($('#resize_left').val())
+
+    if (top != 0) {
+      if (top > 0) {
+        for (var i = 0; i < top; i++) {
+          var row = []
+          for (var i = 0; i < Editor.game_state.map.tiles_width; i++) row.push(new Tile(1))
+          Editor.game_state.map.tiles.unshift(row)
+        }
+      } else if (top < 0) {
+        for (var i = 0; i > top; i--) Editor.game_state.map.tiles.shift()
+      }
+
+      var sprite_x_delta_even = 0
+      var sprite_x_delta_odd = 0
+
+      if (Math.abs(top) % 2 != 0) {
+        for (var i = 0; i < Editor.game_state.map.tiles.length; i++) {
+          if (Editor.game_state.map.tiles.length % 2 != 0) {
+            sprite_x_delta_odd = -1
+            if (i % 2 != 0) {
+              Editor.game_state.map.tiles[i].shift()
+              Editor.game_state.map.tiles[i].push(new Tile(1))
+            }
+          } else {
+            sprite_x_delta_even = 0
+            if (i % 2 == 0) {
+              Editor.game_state.map.tiles[i].pop()
+              Editor.game_state.map.tiles[i].unshift(new Tile(1))
+            }
+          }
+        }
+      }
+
+      for (i = 0; i < Editor.game_state.units.length; i++) {
+        var u = Editor.game_state.units[i]
+        var xd = (i % 2 == 0 ? sprite_x_delta_even : sprite_x_delta_odd)
+        u.move(u.x + xd, u.y + top)
+        u.face_right()
+      }
+
+      for (i = 0; i < Editor.game_state.bases.length; i++) {
+        var b = Editor.game_state.bases[i]
+        var xd = (i % 2 == 0 ? sprite_x_delta_even : sprite_x_delta_odd)
+        b.x = b.x + xd
+        b.y = b.y + top
+        b.sprite.set_to_position(b.x + xd, b.y)
+      }
+    }
+
+    if (bottom > 0) {
+      for (var i = 0; i < bottom; i++) {
+        var row = []
+        for (var i = 0; i < Editor.game_state.map.tiles_width; i++) row.push(new Tile(1))
+        Editor.game_state.map.tiles.push(row)
+      }
+    } else if (bottom < 0) {
+      for (var i = 0; i > bottom; i--) Editor.game_state.map.tiles.pop()
+    }
+
+    if (left != 0) {
+      if (left > 0) {
+        for (var i = 0; i < Editor.game_state.map.tiles.length; i++) {
+          for (var j = 0; j < left; j++) Editor.game_state.map.tiles[i].unshift(new Tile(1))
+        }
+      } else if (left < 0) {
+        for (var i = 0; i < Editor.game_state.map.tiles.length; i++) {
+          for (var j = 0; j > left; j--) Editor.game_state.map.tiles[i].shift()
+        }
+      }
+
+      for (i = 0; i < Editor.game_state.units.length; i++) {
+        var u = Editor.game_state.units[i]
+        u.move(u.x + left, u.y)
+        u.face_right()
+      }
+
+      for (i = 0; i < Editor.game_state.bases.length; i++) {
+        var b = Editor.game_state.bases[i]
+        b.x = b.x + left
+        b.sprite.set_to_position(b.x, b.y)
+      }
+    }
+
+    if (right > 0) {
+      for (var i = 0; i < Editor.game_state.map.tiles.length; i++) {
+        for (var j = 0; j < right; j++) Editor.game_state.map.tiles[i].push(new Tile(1))
+      }
+    } else if (right < 0) {
+      for (var i = 0; i < Editor.game_state.map.tiles.length; i++) {
+        for (var j = 0; j > right; j--) Editor.game_state.map.tiles[i].pop()
+      }
+    }
+
+    Editor.game_state.map.tiles_width = Editor.game_state.map.tiles[0].length
+    Editor.game_state.map.tiles_height = Editor.game_state.map.tiles.length
+
+    Editor.game_state.map.redraw()
+  }
+</script>

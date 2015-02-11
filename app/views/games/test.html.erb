@@ -1,0 +1,50 @@
+<h3>Testing...</h3>
+
+<div id="game_map" style="height: 400px; width: 600px; overflow: hidden; background: black; position: absolute;"></div>
+<div class="clear" style="height: 400px;"></div>
+
+<p>
+  <button onclick="Controller.end_turn();">End Turn</button>
+</p>
+
+<script type="text/javascript">
+  var Controller = null;
+
+  $(document).ready(function() {
+    <%# var game_json = <%= Game.find('4d08198d078c9e46a4000002').to_json.html_safe %>;
+    // test duel
+    var game_json = <%= Game.find('4d1a131b078c9e08a9000005').to_json.html_safe %>;
+    // testmap1
+    <%# var game_json = <%= Game.find('4d26ab27078c9e4660000002').to_json.html_safe %>;
+    var user_json = <%= current_user.to_json.html_safe %>;
+
+    Controller = new GameController(game_json, user_json);
+  });
+</script>
+
+<fb:serverFbml style="width: 755px;">  
+  <script type="text/fbml">
+    <fb:fbml>
+      <fb:request-form
+        action="<URL for post invite action, see fb:request-form docs for details>"
+        method="POST"
+        invite="true"
+        type="XFBML"
+        content="This is a test invitation from XFBML test app &lt;fb:req-choice url=&quot;see fb:req-choice docs for details.&quot; label=&quot;Ignore the Facebook test app!&quot; />">
+
+        <fb:multi-friend-selector showborder="false" actiontext="Invite your friends to use Facebook." />
+      </fb:request-form>
+    </fb:fbml>
+  </script>
+</fb:serverFbml>
+
+<script type="text/javascript">
+  window.fbAsyncInit = function() {
+    FB.init({appId: '<%= FB[:app_id] %>', status: true, cookie: true, xfbml: true});
+  };
+  (function() {
+    var e = document.createElement('script'); e.async = true;
+    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+    document.getElementById('fb-root').appendChild(e);
+  }());
+</script>

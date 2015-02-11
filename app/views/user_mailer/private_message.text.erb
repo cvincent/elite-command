@@ -1,0 +1,8 @@
+Hi, <%= @to_user.username %>!
+
+Another user of Elite Command, <%= @from_user.username %>, sent you a private message. Click the link below to see it:
+
+<%= thread_message_url(@message.thread_identifier, anchor: "message_#{@message.id}") %>
+
+Elite Command HQ
+http://elitecommand.net/

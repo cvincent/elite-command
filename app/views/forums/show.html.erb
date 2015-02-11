@@ -1,0 +1,29 @@
+<h2><%= link_to 'Forums', forums_url %> &gt; <%= @forum.name %></h2>
+
+<p><%= @forum.description %></p>
+
+<p><%= button_to_function 'New Topic', "document.location = #{new_topic_url(:forum_id => @forum._id).inspect.html_safe}", :class => :main %></p>
+
+<table id="topics_listing">
+  <tr>
+    <th>Topic</th>
+    <th>Replies</th>
+    <th>Last Activity</th>
+  </tr>
+  <% @forum.topics.limit(per_page).skip(page * per_page).each do |t| %>
+    <tr>
+      <td><%= link_to t.name, topic_url(t) %> by <%= user_link(t.user) %></td>
+      <td class="count"><%= t.replies.count - 1 %></td>
+      <td class="last_activity">
+        <% if last = t.replies.last %>
+          by <%= user_link(last.user) %>
+          <%= distance_of_time_in_words(last.created_at, Time.now) %> ago
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= render :partial => 'layouts/paginator', :locals => { :collection => @forum.topics, :page => page, :per => per_page, :item_plural => 'topics', :base_url => forum_url(@forum) } %>
+
+<%= render partial: 'layouts/global_chat' %>

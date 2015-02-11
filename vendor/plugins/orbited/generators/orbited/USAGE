@@ -1,0 +1,8 @@
+Description:
+    Generates an orbited.yml configuration file
+
+Example:
+    ./script/generate orbited
+
+    This will create:
+        config/orbited.yml

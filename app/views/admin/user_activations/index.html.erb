@@ -1,0 +1,38 @@
+<h2>User Retention</h2>
+
+<% %w(days weeks).each do |period| %>
+  <% [[:src_1, instance_variable_get("@retention_1_#{period}")], [:src_2, instance_variable_get("@retention_2_#{period}")]].each do |(src_param, counts)| %>
+    <div style="width: 400px; float: left; margin-right: 10px;">
+      <% selected_src = params[src_param] %>
+      <% other_src = (src_param == :src_1 ? :src_2 : :src_1) %>
+      <h3>Retention of <%= selected_src %> by <%= period.singularize %></h3>
+
+      <%= form_tag '#', :method => :get do %>
+        <p>
+          <% src_opts = options_for_select(@user_srcs, selected_src) %>
+          <%= select_tag src_param, src_opts %>
+          <%= hidden_field_tag(other_src, params[other_src]) %>
+          <%= submit_tag 'Update' %>
+        </p>
+      <% end %>
+
+      <% q = { src: selected_src } %>
+      <% q.delete(:src) if selected_src == 'all' %>
+      <% q[:src] = nil if q[:src] == 'none' %>
+      <% first_total = User.where(q).count %>
+
+      <p>Total users from source: <%= first_total %></p>
+
+      <% counts.each_with_index do |step, i| %>
+        <% at, count = step[:time], step[:active] %>
+        <% pct = (first_total == 0 ? 0 : count.to_f / first_total.to_f) %>
+
+        <p><%= period.singularize.capitalize %> <%= i + 1 %> (<%= count %>)</p>
+        <div style="background: green; height: 24px; width: <%= (pct * 100).to_i %>%; margin-bottom: 1em;">
+          <%= number_to_percentage(pct * 100, :precision => 2) %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="clear"></div>
+<% end %>

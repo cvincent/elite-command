@@ -1,0 +1,52 @@
+<h2>Your Settings</h2>
+
+<%= render :partial => 'layouts/errors', :locals => { :errors => @user.errors } %>
+
+<h3>Change Password</h3>
+
+<%= form_for @user do |f| -%>
+  <table>
+    <tr>
+      <th><label>New Password:</label></th>
+      <td><%= f.password_field :password %></td>
+    </tr>
+    <tr>
+      <th><label>Confirm New Password:</label></th>
+      <td><%= f.password_field :password_confirmation %></td>
+    </tr>
+    <tr>
+      <td style="text-align: right" colspan="2">
+        <%= f.submit 'Update Password', :class => 'main' %>
+      </td>
+    </tr>
+  </table>
+<% end -%>
+
+<h3>Email Settings</h3>
+
+<p>Note: We recommend receiving emails to be notified of when it's your turn to play. You may deactivate emails on a per-game basis using the game options. You can also deactivate emails on a per-topic basis in the forums.</p>
+
+<%= form_for @user do |f| -%>
+  <table>
+    <tr>
+      <th><%= label :email, 'Email address:' %></th>
+      <td><%= f.text_field :email %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><label><%= f.check_box :email_game_updates %> Receive game updates</label></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><label><%= f.check_box :email_forum_updates %> Receive forum responses</label></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><label><%= f.check_box :email_announcements %> Receive announcements</label></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td style="text-align: right"><%= f.submit 'Save Email Settings', :class => 'main' %></td>
+    </tr>
+  </table>
+<% end -%>

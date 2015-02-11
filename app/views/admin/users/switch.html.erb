@@ -1,0 +1,6 @@
+<h2>Login as user...</h2>
+
+<%= form_tag({ action: :login_as }, method: :post) do %>
+  <p>Username: <%= text_field_tag :username %></p>
+  <p><%= submit_tag 'Login' %></p>
+<% end %>

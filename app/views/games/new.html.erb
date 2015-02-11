@@ -1,0 +1,97 @@
+<% if current_user and current_user.account_type == 'free' %>
+  <% url = url_for(:controller => :home, :action => :why_subscribe) %>
+  <p class="flash_notice">Play games with up to six players and all units by becoming a subscriber! <%= button_to_function 'Learn more'.html_safe, "location.href = '#{url}'", :class => :main %></p>
+<% end %>
+
+<div id="new_game_form">
+  <h2>New Game</h2>
+
+  <%= render :partial => 'layouts/errors', :locals => { :errors => @game.errors } %>
+
+  <%= form_for @game do |f| %>
+    <table style="width: 450px">
+      <tr>
+        <th style="width: 100px"><label>Name:</label></th>
+        <td><%= f.text_field :name %></td>
+      </tr>
+      <tr>
+        <th><label>Map:</label></th>
+        <td>
+          <select id="game_map_id" name="game[map_id]" onchange="update_preview()">
+            <% maps = current_user.allowed_maps.official.to_a.sort_by { |m| [m.player_count, m.name] } %>
+            <% if @game.map_id and force_map = Map.find(@game.map_id) and !maps.include?(force_map) %>
+              <% maps.unshift(force_map) %>
+            <% end %>
+            <% maps.each do |m| %>
+              <option value="<%= m._id %>" ec-preview-img="<%= m.img_medium || '/images/game/map_preview_placeholder.jpg' %>" ec-description="<%= m.description %>"<%= @game.map_id.to_s == m.id.to_s ? ' selected="selected"' : '' %> ec-starting-credits="<%= m.starting_credits %>">
+                (<%= m.player_count %>) <%= m.name %>
+              </option>
+            <% end %>
+          </select>
+
+          <%= link_to 'Browse all maps', maps_url %>
+        </td>
+      </tr>
+      <tr>
+        <th style="vertical-align: top; padding-top: 4px"><label>Time Limit:</label></th>
+        <td>
+          <%= 
+            f.select :time_limit, [
+              ['1 hour', 1.hour],
+              ['6 hours', 6.hours],
+              ['12 hours', 12.hours],
+              ['1 day', 24.hours],
+              ['3 days', 3.days]
+            ]
+          %>
+          <p>Players can be sent reminders or skipped if they do not take their turn within the time limit.</p>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <label><%= f.check_box :private %> Private game</label>
+          <p>Private games are not published except to people whom you invite specifically. You can invite players after you start the game.</p>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <label><%= f.check_box :unrated %> Unrated game</label>
+          <p>The outcome of an unrated game will not affect player ratings and therefore will not affect leaderboard standings.</p>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: right"><%= f.submit 'Start Game', :class => 'main' %></td>
+      </tr>
+    </table>
+  <% end %>
+</div>
+
+<div id="preview"><h3>Map preview:</h3><p id="description"></p><p>Starting credits: <span id="starting_credits"></span></p></div>
+
+<div class="clear"></div>
+
+<script>
+  var update_preview = null;
+
+  $(document).ready(function() {
+    update_preview = function() {
+      var img = $('option[value=' + $('#game_map_id').val() + ']').attr('ec-preview-img');
+      var desc = $('option[value=' + $('#game_map_id').val() + ']').attr('ec-description');
+      var sc = $('option[value=' + $('#game_map_id').val() + ']').attr('ec-starting-credits');
+      var pre = $('#preview img');
+      
+      if (pre.length == 0) {
+        $('#description').before('<img src="' + img + '"/>');
+      } else {
+        pre.attr('src', img);
+      }
+
+      $('#description').text(desc);
+      $('#starting_credits').text(sc);
+    }
+    
+    update_preview();
+  });
+</script>

@@ -1,0 +1,7 @@
+<% if flash[:alert] %>
+  <p class="flash_alert"><%= flash[:alert] %> <%= button_to_function('Hide this', '$(this).parent().slideUp()') %></p>
+<% end %>
+
+<% if flash[:notice] %>
+  <p class="flash_notice"><%= flash[:notice] %> <%= button_to_function('Hide this', '$(this).parent().slideUp()') %></p>
+<% end %>

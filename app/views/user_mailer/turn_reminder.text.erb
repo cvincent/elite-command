@@ -1,0 +1,13 @@
+Hello, <%= @user.username %>!
+
+<%= @sender.username %> wants to remind you that it is now your turn in <%= @game.name %> on Elite Command. Open the URL below to take your turn:
+<%= game_url(@game, :new_turn => '1') %>
+
+In this match, you may be sent reminders or skipped after <%= pluralize((@game.time_limit / (60 * 60)).to_i, 'hour') %> hours.
+
+Good luck!
+
+---
+
+You have received this email because you are playing a game of Elite Command. Users may send you reminders if you do not take your turn within the time limit for a given game. To unsubscribe from all Elite Command game notifications, update your settings at the following URL:
+<%= edit_user_url(@user) %>

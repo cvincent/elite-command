@@ -1,0 +1,10 @@
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/**/*
+*.swp
+*.psd
+public/assets
+vendor/ruby
+dump.rdb
+*.DS_Store

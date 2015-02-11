@@ -1,0 +1,26 @@
+defaults: &defaults
+  host: localhost
+  autocreate_indexes: true
+  allow_dynamic_fields: false
+  # slaves:
+  #   - host: slave1.local
+  #     port: 27018
+  #   - host: slave2.local
+  #     port: 27019
+
+development:
+  <<: *defaults
+  database: war_development
+
+test:
+  <<: *defaults
+  database: war_test
+
+# should set these as environment variables on your prod server
+production:
+  <<: *defaults
+  host: localhost
+  port: 27017
+  username: REDACTED
+  password: REDACTED
+  database: war_production

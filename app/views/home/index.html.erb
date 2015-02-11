@@ -1,0 +1,77 @@
+<script src="http://connect.facebook.net/en_US/all.js#appId=140816539311551&amp;xfbml=1"></script>
+
+<div id="front_crib">
+  <div id="front_plate">
+    <%= render :partial => 'layouts/flash', :locals => { :flash => flash } %>
+
+    <h2>Welcome, Commander.</h2>
+
+    <p><strong>Elite Command</strong> is a <strong>turn-based multiplayer strategy game</strong> which you can play for <strong>free</strong> right here in your browser! As a warlord battling for supremacy in a post-apocolyptic world, take command of <strong>powerful military units</strong>, <strong>rich terrain</strong>, <strong>asynchronous play</strong>, and <strong>real-time chat</strong> to conquer any who stand between you and the remaining resources of this war-torn planet.</p>
+
+    <!--
+      <div id="screenshots">
+        <% (0..4).to_a.each do |i| %>
+          <%= link_to_function image_tag("screenshots/t#{i}.png", :class => :screenshot), "show_screenshot(#{i})", :class => :screenshot_link %>
+        <% end %>
+        <div class="clear"></div>
+      </div>
+    -->
+
+    <% if !current_user %>
+      <div id="cta">
+        <%= button_to 'Sign up now, it’s free!', new_user_url, :method => :get, :class => 'main', :style => 'font-size: 18px !important' %>
+      </div>
+    <% end %>
+
+    <div id="extras">
+      <div id="like_us">
+        <h3>Like us on Facebook!</h3>
+        <fb:like-box href="http://www.facebook.com/pages/Elite-Command/177466088955835" width="242" colorscheme="dark" show_faces="false" stream="false" header="true"></fb:like-box> 
+      </div>
+
+      <div id="stats">
+        <h3>Stats</h3>
+        <p>
+          <%= number_with_delimiter(User.count) %> players<br/>
+          <%= number_with_delimiter(Game.where(:status => 'started').count) %> active games<br/>
+          <%= number_with_delimiter(Game.where(:status.ne => 'started').count) %> finished games<br/>
+          <%= number_with_delimiter(Map.published.count) %> maps published
+        </p>
+      </div>
+
+      <div class="clear"></div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var screenshot_dialog = null;
+  var captions = [
+    "Red and blue team up against blue, who is undisputed in the east of River War.",
+    "In Converge, four players must vie for scarce resources concentrated in the center.",
+    "Mid-game of a three-player free-for-all in Reactor. It's still anyone's game.",
+    "A massive battle is just beginning to draw its lines in the sands of Epic...",
+    "The map editor allows anyone to get creative and design unique scenarios to play with their friends."
+  ];
+  var dims = [
+    [615, 600],
+    [615, 575],
+    [645, 600],
+    [670, 620],
+    [1020, 340]
+  ];
+
+  function show_screenshot(i) {
+    screenshot_dialog = $('<div style="text-align: center"></div>');
+    screenshot_dialog.append('<img src="/images/screenshots/' + i + '.jpg"/>');
+    screenshot_dialog.append('<p>' + captions[i] + '</p>');
+    screenshot_dialog.append('<p><button onclick="close_dialog(); return false;">Close</button></p>');
+    screenshot_dialog.dialog({width: dims[i][0], height: dims[i][1], autoOpen: false});
+    screenshot_dialog.dialog('open');
+  }
+
+  function close_dialog() {
+    screenshot_dialog.dialog('close');
+    screenshot_dialog = null;
+  }
+</script>

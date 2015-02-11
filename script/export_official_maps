@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+mongoexport -d war_development -c maps -q "{official: true, status: 'published'}" > ./official_maps.mongo

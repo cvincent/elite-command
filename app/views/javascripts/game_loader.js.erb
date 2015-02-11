@@ -1,0 +1,242 @@
+JS.Packages(function() { with(this) {
+  file(<%= javascript_path('/javascripts/jquery.js').inspect.html_safe %>)
+    .provides('jQuery');
+
+  file(<%= javascript_path('/javascripts/jquery-ui/js/jquery-ui-1.8.7.custom.min.js').inspect.html_safe %>)
+    .requires('jQuery')
+    .provides('jQueryUi');
+
+  file(<%= javascript_path('/javascripts/jquery.mousewheel.min.js').inspect.html_safe %>)
+    .requires('jQuery')
+    .provides('jQuery.mousewheel');
+
+  file(<%= javascript_path('/javascripts/jquery.countdown.min.js').inspect.html_safe %>)
+    .requires('jQuery')
+    .provides('jQuery.countdown_plugin');
+
+  file(<%= javascript_path('/javascripts/json2.js').inspect.html_safe %>)
+    .provides('Json2');
+
+  file(<%= javascript_path('/javascripts/ext.js').inspect.html_safe %>)
+    .provides('JS.Ext');
+
+  file(<%= dynamic_javascript_path('/dynamic_javascripts/game_config.js').inspect.html_safe %>)
+    .provides('GameConfig');
+
+  file(<%= javascript_path('/javascripts/ec/engine/dialog.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('jQueryUi')
+    .provides('Dialog');
+
+  file(<%= javascript_path('/javascripts/ec/game/confirmation_dialog.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('Dialog')
+    .provides('ConfirmationDialog');
+
+  file(<%= javascript_path('/javascripts/ec/engine/h_coordinate.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .provides('HCoordinate');
+
+  file(<%= javascript_path('/javascripts/ec/engine/map.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('jQuery')
+    .requires('jQuery.mousewheel')
+    .requires('HCoordinate')
+    .provides('Map');
+
+  file(<%= javascript_path('/javascripts/ec/engine/path_finder.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('JS.Set')
+    .requires('JS.Hash')
+    .requires('HCoordinate')
+    .provides('Walkable')
+    .provides('PathFinder');
+
+  file(<%= javascript_path('/javascripts/ec/engine/range_finder.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('JS.Set')
+    .requires('JS.Hash')
+    .requires('HCoordinate')
+    .requires('PathFinder')
+    .provides('RangeWalkable')
+    .provides('RangeFinder');
+
+  file(<%= javascript_path('/javascripts/ec/engine/sprite_sheet.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('jQuery')
+    .provides('SpriteSheet');
+
+  file(<%= javascript_path('/javascripts/ec/engine/sprite.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('jQuery')
+    .requires('Map')
+    .requires('SpriteSheet')
+    .provides('Sprite');
+
+  file(<%= javascript_path('/javascripts/ec/engine/composite_sprite.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('Sprite')
+    .requires('JS.Set')
+    .provides('CompositeSprite');
+
+  file(<%= javascript_path('/javascripts/ec/game/sprite_sheets.js').inspect.html_safe %>)
+    .requires('SpriteSheet')
+    .requires('GameConfig')
+    .provides('SpriteSheets');
+
+  file(<%= javascript_path('/javascripts/ec/game/spcl_interpreter.js').inspect.html_safe %>)
+    .requires('Game')
+    .requires('Unit')
+    .requires('Base')
+    .provides('SpclInterpreter');
+
+  file(<%= javascript_path('/javascripts/ec/game/unit.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('CompositeSprite')
+    .requires('SpriteSheets')
+    .provides('Unit');
+
+  file(<%= javascript_path('/javascripts/ec/game/base.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('CompositeSprite')
+    .requires('SpriteSheets')
+    .provides('Base');
+
+  file(<%= javascript_path('/javascripts/ec/game/user.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .provides('User');
+
+  file(<%= javascript_path('/javascripts/ec/game/game.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('JS.Set')
+    .requires('Map')
+    .requires('Unit')
+    .requires('Base')
+    .provides('Game');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_command.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('SpclInterpreter')
+    .provides('GameCommand');
+
+  file(<%= javascript_path('/javascripts/ec/game/composite_game_command.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('GameCommand')
+    .provides('CompositeGameCommand');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_commands/move_unit.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('GameCommand')
+    .requires('HCoordinate')
+    .provides('MoveUnit');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_commands/attack.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('GameCommand')
+    .requires('HCoordinate')
+    .provides('Attack');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_commands/capture_base.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('GameCommand')
+    .provides('CaptureBase');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_commands/buy_unit.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('GameCommand')
+    .provides('BuyUnit');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_commands/load_unit.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('GameCommand')
+    .provides('LoadUnit');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_commands/end_turn.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('GameCommand')
+    .provides('EndTurn');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_commands/remind_player.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('GameCommand')
+    .provides('RemindPlayer');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_commands/skip_player.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('GameCommand')
+    .provides('SkipPlayer');
+
+  file(<%= javascript_path('/javascripts/ec/game/attack_dialog.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('Dialog')
+    .provides('AttackDialog');
+
+  file(<%= javascript_path('/javascripts/ec/game/capture_base_dialog.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('Dialog')
+    .provides('CaptureBaseDialog');
+
+  file(<%= javascript_path('/javascripts/ec/game/buy_unit_dialog.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('Dialog')
+    .provides('BuyUnitDialog');
+
+  file(<%= javascript_path('/javascripts/ec/game/unit_stats_dialog.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('Dialog')
+    .provides('UnitStatsDialog');
+
+  file(<%= javascript_path('/javascripts/ec/game/loaded_units_dialog.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('Dialog')
+    .provides('LoadedUnitsDialog');
+
+  file(<%= javascript_path('/javascripts/ec/game/invite_dialog.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('Dialog')
+    .provides('InviteDialog');
+
+  file(<%= javascript_path('/javascripts/ec/engine/orbited_controller.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .provides('OrbitedController');
+
+  file(<%= javascript_path('/javascripts/ec/game/chat_log.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .provides('ChatLog');
+
+  file(<%= javascript_path('/javascripts/ec/game/game_controller.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('JS.State')
+    .requires('Game')
+    .requires('User')
+    .requires('PathFinder')
+    .requires('RangeFinder')
+    .requires('CompositeGameCommand')
+    .requires('MoveUnit')
+    .requires('Attack')
+    .requires('AttackDialog')
+    .requires('CaptureBase')
+    .requires('CaptureBaseDialog')
+    .requires('BuyUnit')
+    .requires('BuyUnitDialog')
+    .requires('UnitStatsDialog')
+    .requires('LoadUnit')
+    .requires('LoadedUnitsDialog')
+    .requires('EndTurn')
+    .requires('RemindPlayer')
+    .requires('SkipPlayer')
+    .requires('jQuery.countdown_plugin')
+    .requires('ConfirmationDialog')
+    .provides('GameController');
+
+  file(<%= javascript_path('/javascripts/ec/game/map_editor_controller.js').inspect.html_safe %>)
+    .requires('JS.Class')
+    .requires('JS.State')
+    .requires('Game')
+    .requires('User')
+    .requires('PathFinder')
+    .requires('RangeFinder')
+    .requires('ConfirmationDialog')
+    .requires('Json2')
+    .provides('MapEditorController');
+}});

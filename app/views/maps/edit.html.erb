@@ -1,0 +1,93 @@
+<h2>
+  <b><%= @map.name %></b>
+  <span>
+    (<i><%= @map.starting_credits %></i> starting credits)
+    [<%= link_to_function 'edit', "Controller.show_edit_dialog()" %>]
+  </span>
+</h2>
+
+<p>On larger maps, use your scrollwheel to scroll. Hold shift to scroll horizontally.</p>
+
+<div id="map"></div>
+
+<div id="terrain_selector">
+  <h3>Terrain</h3>
+
+  <div id="terrain_types">
+    <h4>Terrain Type</h4>
+    <% Map::EditorTileTypes.each_with_index do |t, i| %>
+      <% style = "background-position: -#{32 * i}px 0;" %>
+      <%= link_to_function('', "Controller.select_terrain_type('#{i}')", :style => style, :class => 'editor_button', :id => "terrain_#{i}_button") %>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+
+  <div id="terrain_brush_size">
+    <h4>Brush Size</h4>
+    <% 0.upto(2).each do |i| %>
+      <% style = "background-position: -#{32 * i}px 0;" %>
+      <%= link_to_function('', "Controller.select_terrain_brush_size(#{i + 1})", :style => style, :class => 'editor_button', :id => "terrain_brush_size_#{i + 1}_button") %>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+
+  <div class="clear"></div>
+</div>
+
+<div id="player_object_selector">
+  <h3>Bases and Units</h3>
+
+  <div id="player_select">
+    <%= select_tag 'player', options_for_select([['Neutral', 0]] + (1..6).to_a.map { |p| ["Player #{p}", p] }) %>
+  </div>
+
+  <div id="delete_button_div">
+    <%= link_to_function('Delete', "Controller.select_delete()", :id => 'delete_button', :class => 'editor_button') %>
+  </div>
+
+  <div id="bases">
+    <h4>Structures</h4>
+    <% BaseDefinitions.keys.each_with_index do |b, i| %>
+      <% style = "background-position: -#{32 * i}px 0;" %>
+      <%= link_to_function('', "Controller.select_base_type('#{b}')", :style => style, :class => 'editor_button', :id => "base_type_#{b}_button") %>
+    <% end %>
+
+    <%= link_to_function('', "Controller.select_terrain_modifier('road')", :class => 'editor_button road', :id => "road_button") %>
+    <%= link_to_function('', "Controller.select_terrain_modifier('bridge')", :class => 'editor_button bridge', :id => "bridge_button") %>
+
+    <div class="clear"></div>
+  </div>
+
+  <div id="units">
+    <h4>Units</h4>
+    <% UnitDefinitions.keys.each_with_index do |u, i| %>
+      <% style = "background-position: -#{64 * i}px -34px;" %>
+      <%= link_to_function('', "Controller.select_unit_type('#{u}')", :style => style, :class => 'editor_button', :id => "unit_type_#{u}_button") %>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+
+  <div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+
+<p id="save_buttons">
+  You may save at any time without leaving this screen.
+  <%= button_to_function('Save', "Controller.save()") %>
+  <%= button_to_function('Publish', "Controller.publish()", :class => 'main') %>
+</p>
+
+<script type="text/javascript">
+  var Controller = null;
+
+  $(document).ready(function() {
+    var game_json = <%= @game.to_json.html_safe %>;
+    var id = <%= @map.id.to_s.inspect.html_safe %>;
+    var name = <%= @map.name.inspect.html_safe %>;
+    var description = <%= @map.description.inspect.html_safe %>;
+    var starting_credits = <%= @map.starting_credits %>;
+
+    Controller = new MapEditorController(game_json, id, name, description, starting_credits);
+  });
+</script>

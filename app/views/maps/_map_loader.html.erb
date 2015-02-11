@@ -1,0 +1,17 @@
+<script>
+  var players = [
+    new Player('Red', 'Red'),
+    new Player('Blue', 'Blue'),
+    new Player('Green', 'Green'),
+    new Player('Orange', 'Orange'),
+    new Player('Pink', 'Pink'),
+    new Player('Yellow', 'Yellow')
+  ]
+  
+  var Game = new GameState(<%= @map.tiles.to_json.html_safe %>, 'map', players, [], [])
+  
+  Game.load_bases(<%= @map.bases.to_json.html_safe %>)
+  Game.load_units(<%= @map.units.to_json.html_safe %>)
+  
+  Game.draw_map()
+</script>

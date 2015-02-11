@@ -1,0 +1,104 @@
+<%= form_for(@message) do |f| %>
+  <%= render partial: 'layouts/errors', locals: { errors: @message.errors } %>
+
+  <table id="message_form">
+    <% if !defined?(use_existing_user) or !use_existing_user or !@message.receiver %>
+      <tr>
+        <th><label>To user:</label></th>
+        <td>
+          <%= text_field_tag :to_username, '', size: 40, placeholder: 'Start typing a username...', autocomplete: 'off' %>
+          <div id="ec_autocomplete" style="display: none; position: absolute;"></div>
+          <%= f.hidden_field :to_user_id %>
+        </td>
+      </tr>
+    <% else %>
+      <tr>
+        <th><label>To user:</label></th>
+        <td>
+          <%= @message.receiver.username %>
+          <%= f.hidden_field :to_user_id %>
+        </td>
+      </tr>
+    <% end %>
+    <tr>
+      <th valign="top"><label>Message:</label></th>
+      <td><%= f.text_area :message, rows: 5 %></td>
+    </tr>
+    <tr>
+      <td style="text-align: right" colspan="2">
+        <%= button_to_function 'Cancel', 'history.go(-1)' %>
+        <%= f.submit 'Send', class: :main %>
+      </td>
+    </tr>
+  </table>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    function select_user(username, uid) {
+      $('#ec_autocomplete').hide();
+      $('#to_username').val(username);
+      $('#to_username').blur();
+      $('#message_message').focus();
+      $('#message_to_user_id').val(uid);
+    }
+
+    $('#to_username').keyup(function(e) {
+      var f = $(this);
+
+      if (e.which == 40) { // Down arrow
+        if ($('#ec_autocomplete a.cursor').length == 0) {
+          $('#ec_autocomplete a:first-child').addClass('cursor');
+        } else {
+          var c = $('#ec_autocomplete a.cursor');
+          if (c.next().length > 0) {
+            c.removeClass('cursor');
+            c.next().addClass('cursor');
+          }
+        }
+
+      } else if (e.which == 38) { // Up arrow
+        var c = $('#ec_autocomplete a.cursor');
+        if (c.prev().length > 0) {
+          c.removeClass('cursor');
+          c.prev().addClass('cursor');
+        }
+
+      } else if (e.which == 13) { // Return
+        var c = $('#ec_autocomplete a.cursor');
+        if (c.length > 0) {
+          select_user(c.text(), c.attr('data-user_id'));
+        }
+
+      } else {
+        var cursor = null;
+
+        if (f.val() != '') {
+          $.get('/users/usernames', { objs: 1, autocomplete_from: f.val() }, function(data) {
+            $('#ec_autocomplete').show()
+              .css('top', (f.offset().top - f.offsetParent().offset().top) + 22)
+              .css('left', (f.offset().left - f.offsetParent().offset().left))
+              .css('width', (parseInt(f.css('width')) - 4) || 150)
+              .empty();
+
+            for (var i in data.users) {
+              var user = $('<a href="#">' + data.users[i].username + '</a>').mousedown(function() {
+                select_user($(this).text(), $(this).attr('data-user_id'));
+              });
+              user.attr('data-user_id', data.users[i]._id);
+              $('#ec_autocomplete').append(user);
+            }
+          });
+        }
+      }
+    });
+
+    $('#to_username').blur(function() { $('#ec_autocomplete').hide(); cursor = null; })
+
+    $('#to_username').keydown(function(e) {
+      if (e.which == 40 || e.which == 38 || e.which == 13) {
+        e.preventDefault();
+      }
+    });
+  });
+</script>

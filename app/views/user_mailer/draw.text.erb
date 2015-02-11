@@ -1,0 +1,15 @@
+Hello, <%= @user.username %>!
+
+The game <%= @game.name %> on Elite Command ended in a draw! (It's all about the tots...)
+<%= game_url(@game) %>
+
+Play another?
+<%= games_url %>
+
+---
+
+You have received this email because you are playing a game of Elite Command. To unsubscribe, update game options at the following URL:
+<%= game_url(@game) %>
+
+You may also update your global email settings here:
+<%= edit_user_url(@user) %>

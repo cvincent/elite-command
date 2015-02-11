@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Elite Command</title>
+
+  <%= include_stylesheets :game, :media => 'all' %>
+  
+  <!--[if IE 7]>
+    <%= include_stylesheets :ie7, :media => 'all' %>
+  <![endif]-->
+
+  <!--[if IE]>
+    <%= include_stylesheets :ie, :media => 'all' %>
+  <![endif]-->
+
+  <% if Rails.env == 'production' %>
+    <script type="text/javascript" src="http://js.getexceptional.com/exceptional.js"></script>
+    <script type="text/javascript">
+      Exceptional.setKey('3b90bec2bd740f650e58d661ec320e78376d5e18');
+    </script>
+  <% end %>
+
+  <script type="text/javascript" src="<%= dynamic_javascript_path('/dynamic_javascripts/game_config.js').html_safe %>"></script>
+  <%= include_javascripts :game %>
+  <%= orbited_javascript %>
+
+  <%= csrf_meta_tag %>
+
+  <script type="text/javascript">
+    $.ajaxSetup({
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+      }
+    }); 
+  </script>
+</head>
+
+<body id="<%= params[:controller] %>_controller">
+  <div id="fb-root" style="display: none"></div>
+  <div id="crib">
+    <div id="header">
+      <h1>
+        <a href="<%= root_url %>">Elite Command</a>
+      </h1>
+    </div>
+
+    <div id="menu">
+      <%= link_to 'Join a Game', games_url %>
+      <%= link_to 'Create a Game', new_game_url %>
+      <%= link_to 'Maps', maps_url %>
+      <%= link_to 'Leaderboard', users_url %>
+      <%= link_to 'Forums', forums_url %>
+    </div>
+
+    <% if !current_user %>
+      <div id="login">
+        <%= form_tag login_users_url, :method => :post do %>
+          <table>
+            <tr>
+              <th><label>Username:</label></th>
+              <td><%= text_field_tag :username, '', class: 'text' %></td>
+            </tr>
+            <tr>
+              <th><label>Password:</label></th>
+              <td><%= password_field_tag :password, '', class: 'text' %></td>
+            </tr>
+            <tr>
+              <td style="text-align: right; font-size: 10px" colspan="2">
+                <%= link_to 'Create Account', new_user_url %>
+                <%= link_to 'Forgot Password?', forgot_password_users_url %>
+                <%= hidden_field_tag :r, (request.fullpath == new_user_path ? nil : request.fullpath) %>
+                <%= submit_tag 'Login', :class => 'main' %>
+              </td>
+            </tr>
+          </table>
+        <% end %>
+      </div>
+    <% else %>
+      <div id="account_menu">
+        <%= link_to 'Report a Bug', forum_url(Forum.where(:name => 'Bugs and Feature Requests').first) %>
+        <%= link_to 'My Account', user_url(current_user) %>
+        <%= link_to 'Logout', logout_users_url %>
+      </div>
+
+      <div id="game_alerts">
+        <h2><%= link_to 'Game Alerts <!--[if IE]>&#9660;<![endif]--><!--[if !IE]>-->&#9662;<!--<![endif]-->'.html_safe, user_url(current_user) %></h2>
+        <ul></ul>
+      </div>
+    <% end %>
+
+    <div id="main">
+      <% if params[:controller] != 'home' or params[:action] != 'index' %>
+        <%= render :partial => 'layouts/flash', :locals => { :flash => flash } %>
+      <% end %>
+
+      <p id="go_away" class="flash_alert">Elite Command uses advanced features requiring a modern browser. Please upgrade for the best experience. We recommend <a href="http://www.google.com/chrome">Google Chrome</a>. :)</p>
+
+      <% if !current_user or !current_user.donated_monthly? %>
+        <% if !exclude_ads? %>
+          <div class="banner_ad">
+            <script type="text/javascript"><!--
+              google_ad_client = "ca-pub-2096176877846548";
+              /* EC Banner Top */
+              google_ad_slot = "0808841584";
+              google_ad_width = 728;
+              google_ad_height = 90;
+              //-->
+            </script>
+            <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+          </div>
+
+          <p class="support"><%= support_message %></p>
+        <% end %>
+      <% end %>
+
+      <%= yield %>
+
+      <% if !current_user or !current_user.donated_monthly? %>
+        <% if !exclude_ads? %>
+          <div class="banner_ad bottom">
+            <script type="text/javascript"><!--
+              google_ad_client = "ca-pub-2096176877846548";
+              /* EC Banner Bottom */
+              google_ad_slot = "1036046376";
+              google_ad_width = 728;
+              google_ad_height = 90;
+              //-->
+            </script>
+            <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+          </div>
+
+          <p class="support"><%= support_message %></p>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div id="footer">
+      Copyright &copy; 2010<% if Date.today.year != 2010 %>-<%= Date.today.year %>.<% end %>
+      All your base are belong to us. Thank you for playing!
+    </div>
+  </div>
+
+  <div id="achievement">
+    <%= image_tag('achievements/EndATurn_large.png') %>
+    <h3>Achievement Name</h3>
+    <p>Description here.</p>
+  </div>
+
+  <% if current_user %>
+    <script type="text/javascript">
+      $(function() {
+        window.GameAlerts = new GameAlertsMenu(
+          <%= current_user.game_alerts.to_json.html_safe %>,
+          <%= (defined?(game) and game.present?) ? game.id.to_s.inspect.html_safe : 'null' %>
+        );
+
+        var UserCometHandler = new UserCometController();
+
+        UserCometRelay = new OrbitedController();
+        UserCometRelay.add_subscription('game_alert', UserCometHandler, 'received_game_alert');
+        UserCometRelay.add_subscription('achievement', UserCometHandler, 'received_achievement');
+
+        user_received_data = function(data) {
+          UserCometRelay.received_data(data);
+        }
+
+        <%= stomp_connect("user_#{current_user.id}", callbacks: { onmessageframe: 'user_received_data' }, js: :jquery) %>
+      });
+    </script>
+  <% end %>
+
+  <% if Rails.env == 'production' -%>
+    <script type="text/javascript" src="http://include.reinvigorate.net/re_.js"></script>
+    <script type="text/javascript">
+      try {
+        <% if current_user -%>
+        var re_name_tag = <%= current_user.username.inspect.html_safe %>;
+        <% end -%>
+        reinvigorate.track("x00a6-v0ciafdzts");
+      } catch(err) {}
+    </script>
+  <% end -%>
+</body>

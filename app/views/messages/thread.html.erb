@@ -1,0 +1,20 @@
+<h2>Between you and <%= @other_user.username %></h2>
+
+<p><%= link_to '&larr; Back to inbox'.html_safe, messages_url %></p>
+
+<% @messages.each do |m| %>
+  <div class="message" id="message_<%= m.id %>">
+    <h3>
+      <%= user_link(m.sender) %>,
+      <span>
+        <%= distance_of_time_in_words(m.created_at, Time.now) %> ago
+      </span>
+    </h3>
+
+    <%= simple_format(m.message) %>
+  </div>
+<% end %>
+
+<h3>Reply to <%= @message.receiver.username %></h3>
+
+<%= render partial: 'form', locals: { use_existing_user: true } %>

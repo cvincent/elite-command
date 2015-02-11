@@ -1,0 +1,47 @@
+<h2><%= @map.name %></h2>
+
+<% if current_user and current_user.account_type == 'free' %>
+  <% url = url_for(:controller => :home, :action => :why_subscribe) %>
+  <p class="flash_notice">Access the map editor and the full library of <%= number_with_delimiter(Map.count) %> maps by becoming a subscriber! <%= button_to_function 'Learn more'.html_safe, "location.href = '#{url}'", :class => :main %></p>
+<% end %>
+
+<p><%= @map.description %></p>
+
+<p>Starting credits: <%= @map.starting_credits %> (not including credits earned from starting bases)<br/></p>
+
+<p>
+  <% tot_wins = @map.ffa_win_count.sum %>
+  <% 1.upto(@map.player_count) do |i| %>
+    <%= PlayerColors[i] %> wins:
+    <%= @map.ffa_win_count[i - 1] %>
+    <% if tot_wins != 0 %>
+      (<%= number_to_percentage((@map.ffa_win_count[i - 1].to_f / tot_wins.to_f) * 100, precision: 2, strip_insignificant_zeros: true) %>)
+    <% end %>
+    <%= i < @map.player_count ? '|' : '' %>
+  <% end %>
+</p>
+
+<div id="map_buttons">
+  <% url = new_game_url(:game => { :map_id => @map.id }) %>
+  <div id="start_game_button">
+    <%= submit_tag 'Start Game', :onclick => "window.location.href = #{url.inspect.html_safe}; return false;", :disabled => !current_user || !current_user.map_allowed?(@map) %>
+  </div>
+
+  <div id="clone_map_button">
+    <%= button_to 'Clone as New Map', clone_map_url(@map), :disabled => !current_user || current_user.account_type == 'free' %>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<div id="map"></div>
+
+<script type="text/javascript">
+  var Controller = null;
+
+  $(document).ready(function() {
+    var game_json = <%= @game.to_json.html_safe %>;
+    Controller = new MapEditorController(game_json);
+    Controller.set_state('NoEditMode');
+  });
+</script>

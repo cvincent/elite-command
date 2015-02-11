@@ -1,0 +1,13 @@
+<%= @sender_name %> wants you to join a game of Elite Command!
+
+<%= @sender_name %> says: "<%= @sender_message %>"
+
+Elite Command is a free turn-based strategy game you can play with your friends right now in your browser.
+
+To join the game, click here:
+<%= game_url(@game, (@existing_user ? { :inv => 1 } : { :invited => 1 })) %>
+
+Go forth and conquer!
+
+Elite Command HQ
+http://elitecommand.net/

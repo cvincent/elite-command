@@ -1,0 +1,13 @@
+<h1>Hello, <%= @user.username %>!</h1>
+
+<p>A forum discussion in which you participated, "<%= @reply.topic.name %>", has been updated with a new response from <%= link_to @reply.user.username, user_url(@reply.user) %>:</p>
+
+<div style="text-style: italic">
+  <%= @reply.body %>
+</div>
+
+<p><strong><%= link_to 'View the forum topic', topic_url(@reply.topic) %></strong></p>
+
+<hr/>
+
+<p>You have received this email because you responded to a topic in the Elite Command forums. You may <%= link_to 'unsubscribe from this topic', topic_url(@reply.topic) %> or update your <%= link_to 'global email settings', edit_user_url(@user) %>.</p>

@@ -1,0 +1,2 @@
+Fabricator(:funnel) do
+end

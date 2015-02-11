@@ -1,0 +1,286 @@
+<h2>
+  <%= game.name %>
+  <span>
+    <% if game.unrated %>(unrated)<% end %>
+  </span>
+</h2>
+
+<% if !current_user and params[:new_turn] %>
+  <p class="highlight">
+    Please log in to take your turn.
+  </p>
+<% elsif !current_user and params[:inv] %>
+  <p class="highlight">
+    Please log in to join.
+  </p>
+<% elsif !current_user and params[:invited] %>
+  <div class="highlight">
+    You've been invited to join this game! Please create an account to begin.
+    <%= button_to 'Create Account', new_user_url, :class => 'main', :method => :get %>
+  </div>
+<% end %>
+
+<% if current_user and game.can_add_player?(current_user) %>
+  <div class="highlight">
+    Additional players needed.
+    <%= button_to 'Join', join_game_url(game), :class => 'main' %>
+  </div>
+<% end %>
+
+<% if game.users.include?(current_user) and game.users.size < game.starting_player_count %>
+  <p id="invite_players_notice" class="highlight">
+    Invite your friends to this game!
+    <%= button_to_function 'Invite', 'show_invite_dialog()', :class => 'main' %>
+  </p>
+<% end %>
+
+<div id="game">
+  <div id="map_frame"></div>
+  <div id="map"></div>
+  <div id="loading_splash"></div>
+
+  <div id="status">
+    <div id="round_number" style="display: none"></div>
+    <div id="game_status" style="display: none"></div>
+    <div id="player_turn" style="display: none"></div>
+    <div id="player_bases" style="display: none"></div>
+    <div id="player_credits" style="display: none"></div>
+    <div id="game_time_limit" style="display: none"></div>
+    <div id="spinner"><%= image_tag '/images/style/ajax-loader.gif' %></div>
+    <div id="end_turn_button" style="display: none">
+      <%= button_to_function 'End Turn', 'Controller.end_turn()', :class => 'main' %>
+    </div>
+    <div id="help_button">
+      <%= button_to_function '&nbsp;'.html_safe, '', id: 'game_options_button' %>
+      <%= button_to_function '?', 'window.open("/help")' %>
+    </div>
+
+    <ul id="game_options">
+      <li><%= link_to_function 'Email Settings', 'show_game_options()' %></li>
+      <li><%= link_to_function 'View Fullscreen', 'Controller.fullscreen()', id: 'fullscreen_opt' %></li>
+      <% if game.allow_replays %>
+        <li><%= link_to_function 'Replay from Last Round', 'Controller.replay(true)', class: 'enter_rp' %></li>
+        <li><%= link_to_function 'Replay from Beginning', 'Controller.replay()', class: 'enter_rp' %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div id="players">
+    <h3>Players</h3>
+    <div id="player_options" style="display: none">
+      <span id="surrender_button">
+        <%= button_to_function 'Surrender', 'ConfirmationDialog.show("Surrender?", "You will forfeit immediately and your turn will end. Your ranking will be affected as though you had been defeated normally.", "Surrender", Controller, "surrender")' %>
+      </span>
+      <span id="toggle_peace_button">
+        <%= button_to_function 'Offer Peace', 'Controller.toggle_peace()' %>
+      </span>
+      <span id="undo_button">
+        <%= button_to_function 'Undo', 'Controller.undo()' %>
+      </span>
+
+      <div id="over_time_notice"></div>
+      <div id="over_time_options">
+        <span id="send_reminder_button">
+          <%= button_to_function 'Send a Reminder', 'Controller.send_reminder()' %>
+        </span>
+
+        <span id="skip_button">
+          <%= button_to_function 'Skip', 'ConfirmationDialog.show("Skip player?", "The player\'s turn will be immediately forfeit. Sending a reminder is recommended over skipping.", "Skip", Controller, "skip")' %>
+        </span>
+
+        <span id="force_surrender_button">
+          <%= button_to_function 'Force Surrender', 'ConfirmationDialog.show("Force surrender?", "The player will be immediately forfeit. Only players who have been skipped twice consecutively can be forced to surrender. This option is recommended as a last resort.", "Force Surrender", Controller, "force_surrender")' %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div id="unit_options" style="display: none">
+    <h3>Unit Options</h3>
+    <p id="main_unit_options">
+      <span id="disembark_button">
+        <%= button_to_function 'Disembark a Unit', 'Controller.show_loaded_units()', :id => 'loaded_units_button' %>
+      </span>
+      <span id="heal_button">
+        <%= button_to_function 'Heal/Repair', 'Controller.heal_unit()', :id => 'heal_unit_button' %>
+      </span>
+      <span id="scrap_button">
+        <%= button_to_function 'Scrap', 'Controller.scrap_unit()', :id => 'scrap_unit_button' %>
+      </span>
+    </p>
+    <p id="building_buttons">
+      <span>
+        <%= button_to_function 'Clear Woods', 'Controller.clear_woods()', :id => 'clear_woods_button' %>
+      </span>
+      <span>
+        <%= button_to_function 'Build Road', 'Controller.build_road()', :id => 'build_road_button' %>
+      </span>
+      <span>
+        <%= button_to_function 'Build Bridge', 'Controller.build_bridge()', :id => 'build_bridge_button' %>
+      </span>
+      <span>
+        <%= button_to_function 'Destroy Improvement', 'Controller.destroy_improvement()', :id => 'destroy_improvement_button' %>
+      </span>
+    </p>
+  </div>
+
+  <div id="replay_controls" style="display: none">
+    <h3>
+      Replay Controls
+      <span id="replay_spinner"><%= image_tag '/images/style/ajax-loader.gif' %></span>
+    </h3>
+    <p id="replay_buttons">
+      <%= button_to_function '&laquo;'.html_safe, 'Controller.rp_step_backward()', id: 'rp_rw' %>
+      <%= button_to_function '&nbsp;&#9654;'.html_safe, 'Controller.rp_play()', id: 'rp_pl' %>
+      <%= button_to_function '&raquo;'.html_safe, 'Controller.rp_step_forward()', id: 'rp_ff' %>
+    </p>
+    <p id="end_replay_button">
+      <%= button_to_function 'End Replay', 'Controller.rp_end()', id: 'rp_end' %>
+    </p>
+  </div>
+
+  <div id="chat">
+    <div id="chat_frame"></div>
+    <div id="chat_log"></div>
+    <div>
+      <%= text_field_tag :chat_field, '', :disabled => true %>
+    </div>
+  </div>
+</div>
+
+<div id="fullscreen_bottom_plate"></div>
+
+<div id="game_options_dialog" class="dialog" style="display: none">
+  <h3>Game Options</h3>
+  <p><label><%= check_box_tag :subscribed, '1', game.player_subscribed?(current_user), :disabled => !current_user.try(:email_game_updates) %> Email me when it's my turn</label></p>
+  <% if current_user and !current_user.email_game_updates -%><p>You must <%= link_to 'enable game updates', edit_user_url(current_user) %> to be notified of your turn via email.</p><% end -%>
+  <p style="text-align: right"><%= button_to_function 'Save', 'update_game_options()', :class => 'main' %><button onclick="game_options_dialog.dialog('close'); return false;">Cancel</button></p>
+</div>
+
+<script type="text/javascript">
+  var show_game_options = null;
+  var update_game_options = null;
+  var game_options_dialog = null;
+  var subscribed = null;
+  var show_invite_dialog = null;
+
+  $(document).ready(function() {
+    // Game options
+    
+    subscribed = <%= game.player_subscribed?(current_user).inspect %>;
+    game_options_dialog = $('#game_options_dialog');
+    game_options_dialog.dialog({
+      modal: true, closeOnEscape: false, resizable: false, autoOpen: false, width: 400
+    });
+
+    show_game_options = function() {
+      $('#subscribed[type=checkbox]').attr('checked', subscribed);
+      game_options_dialog.dialog('open');
+      game_options_dialog.css('min-height', 0);
+    }
+
+    update_game_options = function() {
+      subscribed = $('#subscribed[type=checkbox]:checked').val() == '1';
+      $.post(<%= update_subscription_game_url(game).inspect.html_safe %>, {'subscribed?': subscribed});
+      game_options_dialog.dialog('close');
+    }
+
+    show_invite_dialog = function(end_turn_message) {
+      var d = new InviteDialog(Controller.user, Controller.game, end_turn_message);
+      d.open();
+    }
+  });
+</script>
+
+<script type="text/javascript">
+  var NEW_PLAYERS_FORUM_URL = <%= forum_url(Forum.all.where(:name => 'New Players').first).inspect.html_safe %>;
+  var Controller = null;
+  var CometController = null;
+
+  $(document).ready(function() {
+    var game_json = <%= game.to_json.html_safe %>;
+    var user_json = <%= current_user.to_json.html_safe %>;
+
+    var fb_publish_win = <%= flash[:won_game] == 'true' ? 'true' : 'false' %>;
+    var fb_publish_new = <%= flash[:new_game] == 'true' ? 'true' : 'false' %>;
+
+    Controller = new GameController('map', game_json, user_json);
+    Chat = new ChatLog('chat_log', 'chat_frame', 'chat_field', Controller.game);
+
+    Controller.chat_log = Chat;
+
+    CometController = new OrbitedController();
+    CometController.add_subscription('execute_game_command', Controller, 'received_execute_game_command');
+    CometController.add_subscription('unexecute_game_command', Controller, 'received_unexecute_game_command');
+    CometController.add_subscription('new_player', Controller, 'received_player_joined');
+    CometController.add_subscription('chat_message', Chat, 'received_chat_message');
+    CometController.add_subscription('info_message', Chat, 'received_info_message');
+    CometController.add_subscription('player_peace_treaty', Controller, 'received_player_peace_treaty');
+
+    var received_data = function(data) {
+      CometController.received_data(data);
+    }
+
+    <%= stomp_connect("game_#{game._id}", :callbacks => { :onmessageframe => 'received_data' }, :js => :jquery) %>
+
+    window.fbAsyncInit = function() {
+      FB.init({appId: '<%= FB[:app_id] %>', status: true, cookie: true, xfbml: false});
+
+      if (fb_publish_win) {
+        Controller.show_win_dialog();
+      }
+
+      if (fb_publish_new && !Controller.game.new_player) {
+        Controller.show_new_dialog();
+      }
+    };
+    (function() {
+      var e = document.createElement('script'); e.async = true;
+      e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+      document.getElementById('fb-root').appendChild(e);
+    }());
+
+
+
+    var FirstGameStartDialog = new JS.Class(Dialog, {
+      initialize: function(game, user) {
+        var me = this;
+        this.callSuper();
+
+        this.content.append('<h3>Welcome to your first game!</h3>');
+
+        this.content.append('<p>Your first challenger is TomServo, an arrogant but fairly harmless bot.</p>');
+
+        this.content.append('<p>Your first strategy should be to capture as many bases as possible. Bases generate credits and allow you to build more units each round. Start by selecting your Infantry and moving it to one of the neutral bases to begin capturing it.</p>');
+        this.content.append('<p style="text-align: center"><img src="/images/tutorial/capture_bases_' + (game.players[0].equals(user) ? 'red' : 'blue') + '.png"/></p>');
+        this.content.append('<p>After that, select your bases and build some more units for you to use on the next round. Remember, only personnel units can capture bases.</p>');
+
+        this.content.append('<p>Don\'t forget to end your turn when you\'re done, and then watch as TomServo makes his moves. Once he\'s done, you can take your next turn. Repeat until TomServo\'s forces are thoroughly crushed.</p><p>Ready? Go forth and conquer!</p>');
+
+        var buttons = $('<p style="text-align: center"></p>');
+        var close_button = $('<button class="main" style="font-size: 18px !important">Okay!</button>');
+        close_button.click(function() { me.close(); });
+        buttons.append(close_button);
+        this.content.append(buttons);
+      }
+    });
+
+    if (Controller.user.equals(Controller.game.current_user()) && Controller.game.rounds_played == 0 && Controller.game.new_player == true) {
+      var first_game_start_dialog = new FirstGameStartDialog(Controller.game, Controller.user);
+      first_game_start_dialog.open();
+    }
+
+    $(document).click(function() {
+      $('#game_options').hide();
+    });
+
+    $('#game_options_button').click(function(e) {
+      $('#game_options').toggle();
+      $('#game_options').css({
+        top: $('#game_options_button').position().top + $('#game_options_button').outerHeight() + 5,
+        left: $('#game_options_button').position().left - $('#game_options').outerWidth() + $('#game_options_button').outerWidth()
+      });
+      e.stopPropagation();
+    });
+  });
+</script>

@@ -1,0 +1,14 @@
+<% uri = PAYPAL_AUTH[:base_uri] + '/cgi-bin/webscr' %>
+<% uri += "?cmd=#{cmd}&alias=#{PAYPAL_AUTH[:merchant_id]}" if type == :unsubscribe %>
+
+<form action="<%= uri %>" method="post">
+  <%= hidden_field_tag :cmd, cmd %>
+
+  <% if type != :unsubscribe %>
+    <%= hidden_field_tag :encrypted, paypal_data %>
+  <% end %>
+
+  <% label_map = { :create => 'Sign Up!', :modify => 'Switch Subscription', :unsubscribe => 'Unsubscribe'} %>
+  <%= submit_tag label_map[type], :class => (type == :create ? 'main' : nil) %>
+  <img style="position: absolute; top: -100px; left: -100px;" alt="" border="0" width="1" height="1" src="<%= PAYPAL_AUTH[:base_uri] %>/en_US/i/scr/pixel.gif"/>
+</form>

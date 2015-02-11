@@ -1,0 +1,107 @@
+<h2>Units</h2>
+
+<p>Each unit has its strengths and weaknesses on the battlefield. Some of these you may discover on your own. This guide, however, goes over the basics for each unit. If you're looking for detailed combat stats, check the <%= link_to 'combat page', url_for(action: 'combat') %>. Mobility stats can be found on the <%= link_to 'movement page', url_for(action: 'movement') %>.</p>
+
+<h3>Infantry</h3>
+
+<p>Credits: <%= UnitDefinitions[:Infantry][:credits] %></p>
+
+<p>This is the first unit you can build. It's not particularly powerful in any way, but it is very cheap. You will usually use Infantry early in the game to capture bases.</p>
+
+<h3>Grenadier</h3>
+
+<p>Credits: <%= UnitDefinitions[:Grenadier][:credits] %></p>
+
+<p>The Grenadier is someewhat slower than Infantry, but a bit tougher. It is also more effective against Armored units. While it may not be the best counter in the game to Tanks, it is certainly the cheapest, which can be used to your advantage.</p>
+
+<h3>Mortar</h3>
+
+<p>Credits: <%= UnitDefinitions[:Mortar][:credits] %></p>
+
+<p>The Mortar is the cheapest ranged unit in the game. It can be used to ward off Armored units. Place it in Mountains for greatest impact. Note that it does not have a melee attack range, so try to keep it out of the thick of the fray.</p>
+
+<h3>Ranger</h3>
+
+<p>Credits: <%= UnitDefinitions[:Ranger][:credits] %></p>
+
+<p>The Ranger is like a better-trained version of the Infantry. It has greater attack and armor strength (although the Grenadier is still better against Armored units). Its greatest attribute, however, is that most terrain does not slow it down, and it is also capable of amphibious assault via Shallow Water. These strengths are balanced by its price, so you are often better off building Infantry unless you require the Ranger's mobility.</p>
+
+<h3>Sniper</h3>
+
+<p>Credits: <%= UnitDefinitions[:Sniper][:credits] %></p>
+
+<p>The Sniper is extremely powerful against other Personnel units. It is a great unit for thwarting enemy attempts at capturing bases. It also lacks melee range, so be sure to keep it a safe distance from the fray.</p>
+
+<h3>Frigate</h3>
+
+<p>Credits: <%= UnitDefinitions[:Frigate][:credits] %></p>
+
+<p>Small, fast, and able to attack twice in a turn, the Frigate is like the Humvee of the sea. While it is not very effective at attacking most boats, it is perfect for harassing enemy Artillery parked on coastal lands, as well as quickly dispatching enemy Transports.</p>
+
+<h3>Humvee</h3>
+
+<p>Credits: <%= UnitDefinitions[:Humvee][:credits] %></p>
+
+<p>The Humvee is the fastest land unit available and can attack twice in a turn. It can also the only land unit which can continue moving after attacking. It is particularly useful against enemy Personnel units, as well as harassing poorly-defended Artillery.</p>
+
+<h3>Tank</h3>
+
+<p>Credits: <%= UnitDefinitions[:Tank][:credits] %></p>
+
+<p>The Tank is an essential show of strength. It is fairly mobile and a great contender to almost any other land unit.</p>
+
+<h3>Mobile Flak</h3>
+
+<p>Credits: <%= UnitDefinitions[:MobileFlak][:credits] %></p>
+
+<p>Mobile Flak is the answer to Air strikes for players lacking their own Airfield. Any player employing Air power would do well to keep out of the range of enemy Flak.</p>
+
+<h3>Gunship</h3>
+
+<p>Credits: <%= UnitDefinitions[:Gunship][:credits] %></p>
+
+<p>The cheapest Air unit available, the Gunship can terrorize the enemy's ground troops without fear of retaliation. The Gunship is the only Air unit which asserts any Zone of Control.</p>
+
+<h3>Artillery</h3>
+
+<p>Credits: <%= UnitDefinitions[:Artillery][:credits] %></p>
+
+<p>With its range and destructive capability against any land unit, a healthy battery of Arillery units is one of the surest signs of an impending successful ground campaign. They lack melee range and are fairly expensive, so be sure to keep them well defended.</p>
+
+<h3>Fighter</h3>
+
+<p>Credits: <%= UnitDefinitions[:Fighter][:credits] %></p>
+
+<p>The Fighter is the fastest unit in the game, and highly effective against other Air units. Their speed can also be used to easily occupy empty enemy bases, preventing them from being used to build new units.</p>
+
+<h3>Transport</h3>
+
+<p>Credits: <%= UnitDefinitions[:Transport][:credits] %></p>
+
+<p>Few things strike fear into the heart of the enemy like a Transport stacked with ground units. Able to transfer up to 6 mass-units (with Personnel units costing 1, and Armored units costing 3), the Transport can be used to quickly move and deploy your ground forces across the water, whether for the purpose of island invasions, or simply to get your troops where they need to be more quickly. The Transport is an essential unit on any map with lots of water. It is also fairly weak, and if it is destroyed, all units inside it are also lost. Keep this in mind and defend your loaded Transports wth great care.</p>
+
+<h3>Heavy Tank</h3>
+
+<p>Credits: <%= UnitDefinitions[:HeavyTank][:credits] %></p>
+
+<p>The most powerful land unit in the game, the Heavy Tank is a weapon to be feared. It hits hard, and is even harder to kill, able to survive multiple Artillery shellings and still keep rolling.</p>
+
+<h3>Destroyer</h3>
+
+<p>Credits: <%= UnitDefinitions[:Destroyer][:credits] %></p>
+
+<p>Easily the most versatile Naval unit, the Destroyer is your main vessel for use in any ambitious sea campaign. They are quite strong and also able to fire fairly deep into land territories. However, they are very vulnerable to Air attacks, having no anti-air guns of their own.</p>
+
+<h3>Bomber</h3>
+
+<p>Credits: <%= UnitDefinitions[:Bomber][:credits] %></p>
+
+<p>The Bomber is the best weapon for assaulting from the sky. Tanks and Destroyers are both great targets for Bombers.</p>
+
+<h3>Cruiser</h3>
+
+<p>Credits: <%= UnitDefinitions[:Cruiser][:credits] %></p>
+
+<p>The most expensive and most powerful unit in the game, the Cruiser is a thing to be feared. Ground, Air, and Naval units are all turned to cannon fodder by this monster, which can fire its massive guns twice in a turn. The Cruiser, however, lacks the range of the Destroyer, and the smart opponent will use this to their advantage to wear your Cruiser down from a distance, so be sure your Cruiser is accompanied by a larger fleet which can keep those Destroyers at bay and allow your Cruiser to advance slowly.</p>
+
+<p><%= link_to '&larr; Back to Help index'.html_safe, url_for(action: 'index') %></p>

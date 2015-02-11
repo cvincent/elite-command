@@ -1,0 +1,106 @@
+<h2><%= link_to 'Help', url_for(action: 'index') %> &gt; Movement</h2>
+
+<p>Each unit has a set number of movement points and a movement cost for each terrain. The movement cost is the number of movement points needed to enter a tile of that type. Therefore, a unit is able to keep moving until it does not have enough movement points to continue. Once a unit spends its movement points, it doesn't recharge them until the next round. Finally, when a unit is moved to any tile, the game automatically moves it along the path which costs the least movement points.</p>
+
+<h3>Unit Movement Stats</h3>
+
+<table class="listing_table" cellspacing="0">
+  <tr>
+    <th rowspan="2">Unit</th>
+    <th rowspan="2">Movement Points</th>
+    <th colspan="<%= TileTypes.size - 1 %>">Terrain Cost</th>
+  </tr>
+
+  <% tile_array = [:plains, :woods, :desert, :tundra, :swamp, :mountains, :ford, :shallow_water, :sea, :base, :seaport, :airfield, :road, :bridge] %>
+
+  <tr>
+    <% tile_array.each do |t| %>
+      <% i = TileTypes.index(t) %>
+      <th>
+        <% if t == :road %>
+          <div style="background: url(/images/game/roads.png); background-position: 0 -612px; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <% elsif t == :bridge %>
+          <div style="background: url(/images/game/bridges.png); background-position: 0 -34px; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <% elsif ![:base, :airfield, :seaport].include?(t) %>
+          <div style="background: url(/images/game/tileset.png); background-position: -<%= 32 * i %>px center; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <% else %>
+          <div style="background: url(/images/game/bases.png); background-position: -<%= 32 * BaseDefinitions.keys.map(&:to_s).map(&:downcase).index(t.to_s) %>px 0; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <% end %>
+        <div><%= t.to_s.humanize.capitalize %></div>
+      </th>
+    <% end %>
+  </tr>
+
+  <% UnitDefinitions.keys.sort_by { |k| UnitDefinitions[k][:credits] }.each do |name| %>
+    <% attrs = UnitDefinitions[name] %>
+    <tr>
+      <td align="center">
+        <div style="background: url(/images/game/units.png); background-position: -<%= 64 * UnitDefinitions.keys.index(name) %>px -34px; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <div><%= link_to name.to_s.underscore.humanize.titlecase, '#' %></div>
+      </td>
+      <td align="center">
+        <%= attrs[:movement_points] %>
+      </td>
+      <% tile_array.each do |t| %>
+        <% i = TileTypes.index(t) %>
+        <td align="center">
+          <% if attrs[:movement][t] < 99 %>
+            <%= attrs[:movement][t] %>
+          <% else %>
+            &#8734;
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+<h3>Zone of Control</h3>
+
+<p>One caveat with movement is Zone of Control. All ground and sea units with a melee-range attack assert Zone of Control upon the tiles adjacent to them. For an enemy unit to move from one Zone of Control tile to another Zone of Control tile, it must expend all of its movement points. This means that a unit can only move in this fashion if it started its turn within Zone of Control, and that in this way it can only move one tile further into Zone of Control. See the image below for an example:</p>
+
+<p style="text-align: center">
+  <%= image_tag 'help/zoc.png' %>
+</p>
+
+<p>Notice that the enemy Humvee limits the possible destinations of the friendly Humvee because of Zone of Control. Sometimes it may appear that a unit is able to bypass Zone of Control, but it's actually taking an alternate path to reach that destination.</p>
+
+<p>Here are the details on each unit's Zone of Control:</p>
+
+<table class="listing_table" cellspacing="0">
+  <% armor_types = [:personnel, :armored, :air, :naval] %>
+
+  <tr>
+    <th rowspan="2">Unit</th>
+    <th colspan="<%= armor_types.size %>">Zone of Control vs. Armor Type</th>
+  </tr>
+
+  <tr>
+    <% armor_types.each do |a| %>
+      <th><%= a.to_s.humanize %></th>
+    <% end %>
+  </tr>
+
+  <% UnitDefinitions.keys.sort_by { |k| UnitDefinitions[k][:credits] }.each do |name| %>
+    <% attrs = UnitDefinitions[name] %>
+    <tr>
+      <td align="center">
+        <div style="background: url(/images/game/units.png); background-position: -<%= 64 * UnitDefinitions.keys.index(name) %>px -34px; height: 34px; width: 32px; margin: 0 auto;"></div>
+        <div><%= link_to name.to_s.underscore.humanize.titlecase, '#' %></div>
+      </td>
+      <% armor_types.each do |a| %>
+        <td align="center">
+          <% if attrs[:zoc].is_a?(Array) and attrs[:zoc].include?(a) %>
+            Yes
+          <% elsif attrs[:zoc] == :normal and attrs[:attack][a] > 0 %>
+            Yes
+          <% else %>
+            No
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to '&larr; Back to Help index'.html_safe, url_for(action: 'index') %></p>

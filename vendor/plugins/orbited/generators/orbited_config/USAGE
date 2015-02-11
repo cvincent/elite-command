@@ -1,0 +1,9 @@
+Description:
+    Generates an orbited.cfg configuration file. 
+    This generator uses settings from your orbited.yml file to create a file used to configure your orbited server.
+
+Example:
+    ./script/generate orbited_config
+
+    This will create:
+        config/orbited.cfg

@@ -1,0 +1,9 @@
+<h2>Send Announcement</h2>
+
+<% form_tag send_announcement_users_url, :method => :post do %>
+  <p><%= text_field_tag :subject %></p>
+  <p>Hi, [user]!</p>
+  <p><%= text_area_tag :message %></p>
+  <p>Elite Command HQ<br/>http://elitecommand.net/</p>
+  <p><%= submit_tag 'Send', :class => 'main' %></p>
+<% end %>

@@ -1,0 +1,32 @@
+#menu {
+  margin-left: -45px;
+  width: 500px;
+}
+
+#login input[type=text], #login input[type=password] {
+  width: 150px;
+}
+
+#new_user_form input[type=text], #new_user_form input[type=password] {
+  width: 200px;
+}
+
+input[type=button], input[type=submit], button,
+input[type=button]:hover, input[type=submit]:hover, button.main:hover {
+  border-top: 1px solid #AAA;
+  border-left: 1px solid #444;
+  border-right: 1px solid #444;
+  border-bottom: 1px solid #222;
+}
+
+input[type=button].main, input[type=submit].main, button.main,
+input[type=button].main:hover, input[type=submit].main:hover, button.main:hover {
+  border-top: 1px solid #A00;
+  border-left: 1px solid #500;
+  border-right: 1px solid #500;
+  border-bottom: 1px solid #200;
+}
+
+input[type=button][disabled], input[type=submit][disabled], button[disabled] {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+}

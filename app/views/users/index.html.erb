@@ -1,0 +1,20 @@
+<h2>Leaderboard</h2>
+
+<table class="listing_table">
+  <tr>
+    <th>Rank</th>
+    <th>Player</th>
+    <th>Rating</th>
+    <th>Wins-Losses</th>
+  </tr>
+  <% @users.each_with_index do |u, i| %>
+    <tr>
+      <td class="small"><%= i + (page * per_page) + 1 %></td>
+      <td><%= user_link(u) %></td>
+      <td class="small"><%= u.rating %></td>
+      <td class="small">
+        <%= u.games_won.to_i %>-<%= u.games_lost.to_i %>
+      </td>
+    </tr>
+  <% end %>
+</table>

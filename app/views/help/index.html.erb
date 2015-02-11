@@ -1,0 +1,15 @@
+<h2>Help</h2>
+
+<p>Elite Command is not your typical online game. It is a game of depth, where the winner is the player with a superior strategy and the foresight and adaptability to execute that strategy successfully. This also means that it is important to understand the mechanics of the game. This section was created to do just that.</p>
+
+<p>For the barebones basics of the user interface, please refer to the <%= link_to 'tutorial', tutorial_url %>. This guide is intended for a more detailed explanation of the game's mechanics. Finally, feel free to ask questions and point out needed clarifications in the <%= link_to('bugs and features forum', forum_url(Forum.where(:name => 'Bugs and Feature Requests').first)) %>.</p>
+
+<h3>Table of Contents</h3>
+
+<ul>
+  <li><%= link_to 'Movement', url_for(action: 'movement') %></li>
+  <li><%= link_to 'Combat', url_for(action: 'combat') %></li>
+  <li><%= link_to 'Units', url_for(action: 'units') %></li>
+  <li><%= link_to 'Strategy', url_for(action: 'strategy') %></li>
+  <li><%= link_to 'Etiquette', url_for(action: 'etiquette') %></li>
+</ul>

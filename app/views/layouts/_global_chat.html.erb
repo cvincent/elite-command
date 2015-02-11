@@ -1,0 +1,70 @@
+<h3>Global Chat</h3>
+
+<div id="global_chat">
+  <% @global_chat_messages.each do |msg| %>
+    <p>
+      <strong><%= user_link(msg.user) %>: </strong>
+      <%= msg.message %>
+      <span><%= time_ago_in_words(msg.created_at) %> ago</span>
+    </p>
+  <% end %>
+</div>
+
+<%= form_for GlobalChatMessage.new, html: { onsubmit: 'return false;' } do |f| %>
+  <div>
+    <%= f.text_field :message, disabled: current_user.nil?, placeholder: (current_user ? 'Type to chat...' : 'You must login to chat.') %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(function() {
+    var GlobalChatLog = new JS.Class({
+      initialize: function() {
+        var me = this;
+        this.log = $('#global_chat');
+        this.input = $('#global_chat_message_message');
+
+        this.input.keypress(function(e) {
+          if (e.keyCode == 13) {
+            var msg = me.input.val();
+            me.input.val('');
+            me.send_message(msg);
+          }
+        });
+
+        this.log.attr('scrollTop', 10000000)
+      },
+
+      send_message: function(msg) {
+        $.post('/global_chat_messages', { 'global_chat_message[message]': msg });
+      },
+
+      received_chat_message: function(msg) {
+        var user = $('<a></a>');
+        user.attr('href', '/users/' + msg.user_id);
+        user.text(msg.username);
+        user = $('<strong></strong>').append(user).append(':');
+
+        var div = $('<p></p>');
+        div.addClass('chat_message');
+        div.append(user);
+        div.append(' ' + msg.message + ' ');
+        div.append('<span>just now</span>');
+
+        this.log.append(div);
+        this.log.attr('scrollTop', 10000000)
+      }
+    });
+
+    var Chat = new GlobalChatLog();
+
+    var CometController = new OrbitedController();
+    CometController.add_subscription('chat_message', Chat, 'received_chat_message');
+
+    var received_data = function(data) {
+      CometController.received_data(data);
+    }
+
+    <%= stomp_connect("global_chat", :callbacks => { :onmessageframe => 'received_data' }, :js => :jquery) %>
+  });
+</script>

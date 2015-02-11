@@ -1,0 +1,23 @@
+<h2>Forums</h2>
+
+<table id="topics_listing">
+  <tr>
+    <th>Forum</th>
+    <th>Topics</th>
+    <th>Last Activity</th>
+  </tr>
+  <% @forums.each do |f| %>
+    <tr>
+      <td><%= link_to(f.name, forum_url(f)) %><br/><%= f.description %></td>
+      <td class="count"><%= f.topics.size %></td>
+      <td class="last_activity">
+        <% if last = f.topics.desc(:updated_at).first.try(:replies).try(:desc, :created_at).try(:first) %>
+          by <%= user_link(last.user) %>
+          <%= distance_of_time_in_words(last.updated_at, Time.now) %> ago
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= render partial: 'layouts/global_chat' %>

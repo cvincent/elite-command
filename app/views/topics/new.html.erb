@@ -1,0 +1,34 @@
+<h2><%= link_to 'Forums', forums_url %> &gt; <%= link_to @forum.name, forum_url(@forum) %> &gt; New Topic</h2>
+
+<%= render :partial => 'layouts/errors', :locals => { :errors => @topic.errors } %>
+
+<%= form_for @topic do |f| %>
+  <table>
+    <tr>
+      <th>Name:</th>
+      <td><%= f.text_field :name %></td>
+    </tr>
+    <tr>
+      <th valign="top">Body:</th>
+      <td><%= f.text_area :body %></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>
+        <label>
+          <%= check_box_tag :subscribe, '1', current_user.email_forum_updates, :disabled => !current_user.email_forum_updates %>
+          Subscribe to this topic
+        </label>
+        <% if !current_user.email_forum_updates -%>
+          <br/>You must <%= link_to 'enable forum updates', edit_user_url(current_user) %> to receive emails about replies to this topic.
+        <% end -%>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="text-align: right">
+        <%= hidden_field_tag :forum_id, params[:forum_id] %>
+        <%= f.submit 'Post Topic', :class => 'main' %>
+      </td>
+    </tr>
+  </table>
+<% end %>

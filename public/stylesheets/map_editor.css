@@ -1,0 +1,143 @@
+#maps_controller #map {
+  background: black;
+  height: 528px;
+  border: 5px solid #666;
+  position: relative;
+  top: 0;
+  width: auto;
+  cursor: crosshair;
+}
+
+a.editor_button {
+  display: block;
+  height: 34px;
+  width: 32px;
+  background-color: transparent;
+  border: 1px solid white;
+  margin: 1px;
+  float: left;
+}
+
+a.editor_button:hover, a.editor_button.selected {
+  background-color: black;
+  border: 1px solid #600;
+}
+
+a.editor_button.disabled, a.editor_button.disabled:hover {
+  opacity: 0.5;
+  background-color: transparent;
+  border: 1px solid white;
+  cursor: default;
+}
+
+#delete_button {
+  height: auto;
+  width: auto;
+  color: white;
+}
+
+#terrain_selector {
+  width: 339px;
+  background: #111;
+  padding: 1px 10px 10px 10px;
+  margin: 1em 10px 10px 0;
+  float: left;
+}
+
+#terrain_selector h3, #player_object_selector h3 {
+  margin: 10px 0;
+}
+
+h4 {
+  margin: 10px 0;
+}
+
+#terrain_types {
+  background: #222;
+  float: left;
+  width: 180px;
+  height: 112px;
+  padding: 0 10px 10px 10px;
+  margin-right: 10px;
+}
+
+#terrain_types a {
+  background-image: url(/images/game/tileset.png);
+}
+
+#terrain_brush_size {
+  background: #222;
+  float: left;
+  width: 108px;
+  height: 112px;
+  padding: 0 10px 10px 10px;
+}
+
+#terrain_brush_size a {
+  background-image: url(/images/game/terrain_brushes.png);
+}
+
+#player_object_selector {
+  width: 575px;
+  background: #111;
+  padding: 1px 10px 10px 10px;
+  margin: 1em 0 10px 0;
+  float: left;
+  position: relative;
+}
+
+#player_select {
+  position: absolute;
+  top: 8px;
+  left: 150px;
+}
+
+#delete_button_div {
+  position: absolute;
+  top: 10px;
+  right: 32px;
+}
+
+#bases {
+  background: #222;
+  float: left;
+  width: 108px;
+  height: 112px;
+  padding: 0 10px 10px 10px;
+}
+
+#bases a {
+  background-image: url('/images/game/bases.png');
+}
+
+#bases a.road {
+  background-image: url(/images/game/roads.png);
+  background-position: 0 -612px;
+}
+
+#bases a.bridge {
+  background-image: url(/images/game/bridges.png);
+  background-position: 0 -34px;
+}
+
+#units {
+  background: #222;
+  float: left;
+  width: 396px;
+  height: 112px;
+  padding: 0 10px 10px 10px;
+  margin-left: 10px;
+}
+
+#units a {
+  background-image: url('/images/game/units.png');
+}
+
+#save_buttons {
+  margin: 10px 0;
+  color: #666;
+  font-size: 12px;
+  text-align: right;
+  background: #111;
+  padding: 10px;
+}

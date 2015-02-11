@@ -1,0 +1,7 @@
+<h2>Funnels</h2>
+
+<ul>
+  <% @funnels.each do |f| %>
+    <li><%= link_to f.name, admin_funnel_url(f) %></li>
+  <% end %>
+</ul>

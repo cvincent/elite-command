@@ -1,0 +1,9 @@
+var GameConfig = {
+  colors: <%= PlayerColors.to_json.html_safe %>,
+  units: <%= UnitDefinitions.to_json.html_safe %>,
+  free_unit_types: <%= FreeUnitTypes.to_json.html_safe %>,
+  bases: <%= BaseDefinitions.to_json.html_safe %>,
+  tiles: <%= TileTypes.to_json.html_safe %>,
+  terrain_modifiers: <%= TerrainModifierDefinitions.to_json.html_safe %>,
+};
+

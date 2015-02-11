@@ -1,0 +1,10 @@
+<% uri = PAYPAL_AUTH[:base_uri] + '/cgi-bin/webscr' %>
+<% uri += "?cmd=#{cmd}&alias=#{PAYPAL_AUTH[:merchant_id]}" %>
+
+<form action="<%= uri %>" method="post" style="text-align: center">
+  <%= hidden_field_tag :cmd, cmd %>
+  <%= hidden_field_tag :encrypted, paypal_data %>
+
+  <%= submit_tag 'Donate!', class: 'main', style: 'font-size: 28px !important; margin: 0 auto !important;' %>
+  <img style="position: absolute; top: -100px; left: -100px;" alt="" border="0" width="1" height="1" src="<%= PAYPAL_AUTH[:base_uri] %>/en_US/i/scr/pixel.gif"/>
+</form>

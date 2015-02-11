@@ -1,0 +1,80 @@
+<%= render :partial => 'layouts/errors', :locals => { :errors => funnel.errors } %>
+
+<%= form_for ['admin', funnel], :method => (funnel.new_record? ? :post : :put) do %>
+  <dl>
+    <dt>Name:</dt>
+    <dd><%= text_field :funnel, :name %></dd>
+
+    <dt>Steps:</dt>
+    <dd>
+      <ol id="steps">
+        <% funnel.steps.each_with_index do |s, i| %>
+          <li>
+            <div class="handle"></div>
+            <%= select_tag "funnel[steps][#{i}]", options_for_select(@steps.map { |s| [s.to_s.humanize, s] }, s) %>
+            <%= button_to_function 'Delete', 'return false;', :class => 'del_step_btn' %>
+          </li>
+        <% end %>
+      </ol>
+
+      Add a step:
+      <%= select_tag "new_step", options_for_select(@steps.map { |s| [s.to_s.humanize, s] }) %>
+      <%= button_to_function 'Add', 'return false;', :id => 'add_step_btn' %>
+    </dd>
+  </dl>
+
+  <p><%= submit_tag "Save" %></p>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    function reflow_step_names() {
+      $('#steps select').each(function(i, e) {
+        $(e).attr('name', 'funnel[steps][' + i + ']');
+      });
+    }
+
+    function setup_delete_buttons() {
+      $('.del_step_btn').click(function() {
+        var me = $(this);
+        me.parent().remove();
+        reflow_step_names();
+      });
+    }
+
+    $('#add_step_btn').click(function() {
+      var next_idx = $('#steps li').length;
+      var new_step = $('#new_step').clone();
+      new_step.attr('id', '');
+      new_step.attr('name', 'funnel[steps][' + next_idx + ']');
+      new_step.val($('#new_step').val());
+
+      var del_btn = $('<input onclick="return false;;" type="button" value="Delete" class="del_step_btn"/>');
+
+      $('#steps').append(
+        $('<li></li>').append('<div class="handle"></div>')
+          .append(new_step)
+          .append(del_btn)
+      );
+      setup_delete_buttons();
+    });
+
+    $('#steps').sortable({
+      update: function() {
+        reflow_step_names();
+      }
+    });
+
+    setup_delete_buttons();
+  });
+</script>
+
+<style type="text/css">
+  .handle {
+    background: #444;
+    height: 20px;
+    width: 20px;
+    float: left;
+    margin-right: 8px;
+  }
+</style>

@@ -1,0 +1,39 @@
+<h2>Analytics</h2>
+
+<%= form_tag analytics_url, :method => :get do %>
+  <dl>
+    <dt>Source:</dt>
+    <dd>
+      <% user_src_opts = options_for_select(@user_srcs, params[:user_action][:user_src]) %>
+      <%= select_tag 'user_action[user_src]', user_src_opts %>
+    </dd>
+
+    <dt>Funnel:</dt>
+    <dd>
+      <% funnel_opts = options_for_select(AdminController::FUNNELS.map { |f, v| [f.to_s.humanize, f] }, params[:user_action][:funnel].to_sym) %>
+      <%= select_tag 'user_action[funnel]', funnel_opts %>
+    </dd>
+  </dl>
+
+  <p style="text-align: left"><%= submit_tag 'Update' %></p>
+<% end %>
+
+<h3><%= params[:user_action][:funnel].to_s.humanize %> from <%= params[:user_action][:user_src] %></h3>
+
+<% first_total = nil %>
+<% last_total = nil %>
+<% @step_results.each do |step| %>
+  <% step_name, count = *step %>
+  <% first_total = count if first_total.nil? %>
+  <% last_total ||= count %>
+  <% pct = (last_total == 0 ? 0 : count.to_f / last_total.to_f) %>
+  <% opct = (first_total == 0 ? 0 : count.to_f / first_total.to_f) %>
+  <p>
+    <%= number_to_percentage(pct * 100, :precision => 2) %>
+    (<%= count %>): <%= step_name.to_s.humanize %>
+  </p>
+  <div style="background: green; height: 24px; width: <%= (opct * 100).to_i %>%; margin-bottom: 1em;">
+    <%= number_to_percentage(opct * 100, :precision => 2) %> overall
+  </div>
+  <% last_total = count %>
+<% end %>

@@ -1,0 +1,41 @@
+#topics_listing {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#topics_listing th {
+  background: black;
+}
+
+#topics_listing td, #topics_listing th {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+#topics_listing .count {
+  width: 100px;
+  text-align: center;
+}
+
+#topics_listing .last_activity {
+  width: 200px;
+}
+
+#topic_listing {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#topic_listing td {
+  border: 1px solid black;
+  padding: 0 15px;
+}
+
+#topic_listing td.meta {
+  background: black;
+  width: 200px;
+}
+
+.paginator {
+  text-align: center;
+}

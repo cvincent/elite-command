@@ -1,0 +1,99 @@
+<div class="section">
+  <h2>Introduction</h2>
+
+  <div class="step">
+    <h3>1 of 4</h3>
+    <p><img src="/images/tutorial/newtutorial1.png"/></p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>The Interface</h2>
+
+  <div class="step">
+    <h3>2 of 4</h3>
+    <p><img src="/images/tutorial/newtutorial2.png"/></p>
+  </div>
+
+  <div class="step">
+    <h3>3 of 4</h3>
+    <p><img src="/images/tutorial/newtutorial3.png"/></p>
+  </div>
+
+</div>
+
+<div class="section">
+  <div class="step">
+    <h3>4 of 4</h3>
+    <p><img src="/images/tutorial/newtutorial4.png"/></p>
+
+    <p>Now you have the basics. Go forth and conquer!</p>
+
+    <p>
+      <%= button_to 'Play a game!', new_player_join_games_url(game_join_source: 'tutorial'), :class => :main, :style => 'font-size: 24px !important' %>
+    </p>
+  </div>
+</div>
+
+<script>
+  var next = null;
+  var prev = null;
+
+  $(document).ready(function() {
+    $('.step').hide();
+    $('.section').hide();
+    $('.step').first().show().addClass('current');
+    $('.section').first().show();
+
+    $('.step').each(function(i, e) {
+      $(e).append('<p class="tut_buttons" style="clear: both; text-align: center"><button class="prev" onclick="prev()">Previous</button><button class="next main" style="font-size: 24px !important;" onclick="next()">Next</button></p>');
+    });
+
+    $('.step').first().find('button.prev').hide();
+    $('.step').last().find('button.next').hide();
+
+    next = function() {
+      var found_current_step = false;
+
+      $('.section').hide();
+
+      $('.step').each(function(i, e) {
+        var e = $(e);
+
+        if (!found_current_step) {
+          if (e.hasClass('current')) {
+            e.removeClass('current');
+            e.hide();
+            found_current_step = true;
+          }
+          } else {
+          e.addClass('current');
+          e.show();
+          e.parent().show();
+          return false;
+        }
+      });
+    }
+
+    prev = function() {
+      var last_found = null;
+
+      $('.section').hide();
+
+      $('.step').each(function(i, e) {
+        var e = $(e);
+
+        if (e.hasClass('current')) {
+          e.removeClass('current');
+          e.hide();
+          last_found.addClass('current');
+          last_found.show();
+          last_found.parent().show();
+          return false;
+        }
+
+        last_found = e;
+      });
+    }
+  });
+</script>

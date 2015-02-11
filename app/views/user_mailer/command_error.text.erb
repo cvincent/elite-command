@@ -1,0 +1,14 @@
+CommandError occurred in the following game:
+<%= game_url(@game) %>
+
+CommandError:
+<%= @error.inspect %>
+
+Backtrace:
+<%= @error.backtrace.join("\n") %>
+
+Game JSON:
+<%= PP.pp(@game.to_json_hash.merge(:map_id => @game.map_id), '').html_safe %>
+
+Command JSON:
+<%= PP.pp(@command.to_json_hash, '').html_safe %>

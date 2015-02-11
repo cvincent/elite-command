@@ -1,0 +1,22 @@
+development: &development
+  host: localhost
+  port: 8000
+  protocol: stomp
+  stomp_host: 127.0.0.1
+  stomp_port: 61613
+  reactor: select
+  morbidq: 1
+  restrict_access: 0
+
+test:
+  <<: *development
+
+production:
+  host: "elitecommand.net"
+  port: 8000
+  protocol: stomp
+  stomp_host: 127.0.0.1
+  stomp_port: 61613
+  reactor: epoll
+  morbidq: 1
+  restrict_access: 1

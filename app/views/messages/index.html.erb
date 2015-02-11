@@ -1,0 +1,33 @@
+<h2>Private messages</h2>
+
+<p>
+  <%= button_to 'New Message', new_message_url, class: 'main', method: 'get' %>
+</p>
+
+<table class="listing_table">
+  <tr>
+    <th class="medium">Between You and...</th>
+    <th>Message</th>
+    <th class="small">Last Message</th>
+  </tr>
+
+  <% @messages.each do |message| %>
+    <tr<%= message.show_as_unread?(current_user) ? ' class=unread' : '' %>>
+      <% other_user = message.other_user(current_user) %>
+      <td class="medium"><%= user_link(other_user) %></td>
+      <td>
+        <%= truncate(message.message, length: 150) %>
+        <%= link_to 'View conversation', thread_message_url(message.thread_identifier, anchor: "message_#{message.id}") %>
+      </td>
+      <td class="small"><%= distance_of_time_in_words(message.created_at, Time.now) %> ago</td>
+    </tr>
+  <% end %>
+
+  <% if @messages.empty? %>
+    <tr>
+      <td colspan="3" align="center">
+        You are not in any message threads.
+      </td>
+    </tr>
+  <% end %>
+</table>

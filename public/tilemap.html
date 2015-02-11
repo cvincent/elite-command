@@ -1,0 +1,286 @@
+<script src="http://code.jquery.com/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+  TileSize = 32
+  TileSizeH = 8
+  TileSizeS = 16
+  TileSizeR = 16
+  
+  TileTypes = [
+    {
+      name: 'plains',
+      land_mv_cost: 1,
+      water_mv_cost: -1,
+      air_mv_cost: 1
+    },
+    {
+      name: 'sea',
+      land_mv_cost: -1,
+      water_mv_cost: 1,
+      air_mv_cost: 1
+    },
+    {
+      name: 'mountains',
+      land_mv_cost: 3,
+      water_mv_cost: -1,
+      air_mv_cost: 1
+    },
+    {
+      name: 'woods',
+      land_mv_cost: 2,
+      water_mv_cost: -1,
+      air_mv_cost: 1
+    },
+    {
+      name: 'desert',
+      land_mv_cost: 1,
+      water_mv_cost: -1,
+      air_mv_cost: 1
+    },
+    {
+      name: 'tundra',
+      land_mv_cost: 1,
+      water_mv_cost: -1,
+      air_mv_cost: 1
+    }
+  ]
+  
+  function Tile(tile_index) {
+    this.tile_index = tile_index
+    this.tile_type = TileTypes[tile_index]
+    
+    this.set_type = function(new_type) {
+      this.tile_index = new_type
+      this.tile_type = TileTypes[new_type]
+    }
+    
+    this.to_dom = function() {
+      var e = $(document.createElement('div'))
+      e.css('position', 'absolute')
+      e.css('background-repeat', 'no-repeat')
+      e.css('background-image', 'url(images/game/tileset.png)')
+      e.css('background-position', '-' + (this.tile_index * TileSize) + ' 0')
+      e.css('width', TileSize)
+      e.css('height', TileSize)
+      e.css('z-index', 1)
+      e.hide()
+      
+      return e
+    }
+  }
+  
+  function TileMap(dom_id, tiles) {
+    this.dom_id = dom_id
+    this.e = $('#' + dom_id)
+    this.tiles = tiles
+    this.tiles_width = tiles[0].length
+    this.tiles_height = tiles.length
+    
+    this.drew_once = false
+    
+    var map_from_ev = this
+    
+    this.e.click(function(ev) {
+      var x = ev.pageX - $(this).offset().left
+      var y = ev.pageY - $(this).offset().top
+      
+      tile_coords = map_from_ev.pixel_to_tile_coords(x, y)
+      map_from_ev.tile_click(tile_coords[0], tile_coords[1])
+    })
+    
+    this.e.mousedown(function(ev) {
+      var x = ev.pageX - $(this).offset().left
+      var y = ev.pageY - $(this).offset().top
+      
+      tile_coords = map_from_ev.pixel_to_tile_coords(x, y)
+      map_from_ev.tile_mousedown(tile_coords[0], tile_coords[1])
+    })
+    
+    this.e.mouseup(function(ev) {
+      var x = ev.pageX - $(this).offset().left
+      var y = ev.pageY - $(this).offset().top
+      
+      tile_coords = map_from_ev.pixel_to_tile_coords(x, y)
+      map_from_ev.tile_mouseup(tile_coords[0], tile_coords[1])
+    })
+    
+    this.e.mousemove(function(ev) {
+      var x = ev.pageX - $(this).offset().left
+      var y = ev.pageY - $(this).offset().top
+      
+      tile_coords = map_from_ev.pixel_to_tile_coords(x, y)
+      map_from_ev.tile_mousemove(tile_coords[0], tile_coords[1])
+    })
+    
+    this.tile_click = function(x, y) {
+      // console.log(tile_coords[0] + ', ' + tile_coords[1])
+    }
+    
+    this.tile_mousedown = this.tile_click
+    this.tile_mouseup = this.tile_click
+    this.tile_mousemove = this.tile_click
+    
+    this.tile = function(x, y) {
+      return this.tiles[y][x]
+    }
+    
+    this.draw = function() {
+      // this.e.empty()
+      
+      for (var x = 0; x < this.tiles_width; x++) {
+        for (var y = 0; y < this.tiles_height; y++) {
+          this.draw_tile(x, y)
+        }
+      }
+    }
+    
+    this.draw_tile = function(x, y) {
+      var tile_id = 'tile_x_' + x + '_y_' + y
+      $('#' + tile_id).remove()
+      
+      var tile = this.tile(x, y)
+      var dom_tile = tile.to_dom()
+      dom_tile.attr('id', 'tile_x_' + x + '_y_' + y)
+      
+      var coords = this.tile_to_pixel_coords(x, y)
+      dom_tile.css('left', coords[0] + 'px')
+      dom_tile.css('top',  coords[1] + 'px')
+      this.e.append(dom_tile)
+      dom_tile.show()
+    }
+    
+    this.tile_to_pixel_coords = function(tx, ty) {
+      var px = 0
+      var py = ty * (TileSizeH + TileSizeS)
+      
+      if (ty % 2 == 0) {
+        px = tx * 2 * TileSizeR
+      } else {
+        px = tx * 2 * TileSizeR + TileSizeR
+      }
+      
+      return [px, py]
+    }
+    
+    this.pixel_to_tile_coords = function(px, py) {
+      var tx = null
+      var ty = null
+      
+      var sx = parseInt(px / (2 * TileSizeR))
+      var sy = parseInt(py / (TileSizeH + TileSizeS))
+      
+      var spx = px % (2 * TileSizeR)
+      var spy = py % (TileSizeH + TileSizeS)
+      
+      var section_type = ''
+      
+      if (sy % 2 == 0) section_type = 'A'; else section_type = 'B'
+      
+      var m = TileSizeH / TileSizeR
+      
+      if (section_type == 'A') {
+        tx = sx
+        ty = sy
+        if (spy < (TileSizeH - (spx * m))) {
+          tx = sx - 1
+          ty = sy - 1
+        }
+        if (spy < (-TileSizeH + (spx * m))) {
+          tx = sx
+          ty = sy - 1
+        }
+      } else {
+        if (spx >= TileSizeR) {
+          if (spy < (2 * TileSizeH - (spx * m))) {
+            tx = sx
+            ty = sy - 1
+          } else {
+            tx = sx
+            ty = sy
+          }
+        } else {
+          if (spy < spx * m) {
+            tx = sx
+            ty = sy - 1
+          } else {
+            tx = sx - 1
+            ty = sy
+          }
+        }
+      }
+      
+      return [tx, ty]
+    }
+  }
+</script>
+
+<div id="map" style="background: black; width: 656px; height: 512px; position: absolute"></div>
+
+<form id="tile_selector" style="position: absolute; top: 10px; left: 670px">
+  <p><a href="#" onclick="draw_tile = 0" style="display: block; height: 32px; width: 32px; background: url(images/game/tileset.png) 0 0"></a></p>
+  <p><a href="#" onclick="draw_tile = 1" style="display: block; height: 32px; width: 32px; background: url(images/game/tileset.png) -32 0"></a></p>
+  <p><a href="#" onclick="draw_tile = 2" style="display: block; height: 32px; width: 32px; background: url(images/game/tileset.png) -64 0"></a></p>
+  <p><a href="#" onclick="draw_tile = 3" style="display: block; height: 32px; width: 32px; background: url(images/game/tileset.png) -96 0"></a></p>
+  <p><a href="#" onclick="draw_tile = 4" style="display: block; height: 32px; width: 32px; background: url(images/game/tileset.png) -128 0"></a></p>
+  <p><a href="#" onclick="draw_tile = 5" style="display: block; height: 32px; width: 32px; background: url(images/game/tileset.png) -160 0"></a></p>
+</form>
+
+<script>
+  var map_tiles = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ]
+  
+  for (var x = 0; x < map_tiles[0].length; x++) {
+    for (var y = 0; y < map_tiles.length; y++) {
+      map_tiles[y][x] = new Tile(map_tiles[y][x])
+    }
+  }
+  
+  var map = new TileMap('map', map_tiles)
+  map.draw()
+  
+  var draw_tile = 0
+  var drawing = false
+  
+  map.tile_click = function(x, y) {
+    //this.tile(x, y).set_type(draw_tile)
+    //this.draw()
+  }
+  
+  map.tile_mousedown = function(x, y) {
+    this.tile(x, y).set_type(draw_tile)
+    map.draw_tile(x, y)
+    drawing = true
+  }
+  
+  map.tile_mouseup = function(x, y) {
+    drawing = false
+  }
+  
+  map.tile_mousemove = function(x, y) {
+    if (drawing) {
+      this.tile(x, y).set_type(draw_tile)
+      map.draw_tile(x, y)
+    }
+  }
+</script>

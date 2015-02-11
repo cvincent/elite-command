@@ -1,0 +1,111 @@
+<h2>Maps</h2>
+
+<% if current_user and current_user.account_type == 'free' %>
+  <% url = url_for(:controller => :home, :action => :why_subscribe) %>
+  <p class="flash_notice">Access the map editor and the full library of <%= number_with_delimiter(Map.count) %> maps by becoming a subscriber! <%= button_to_function 'Learn more'.html_safe, "location.href = '#{url}'", :class => :main %></p>
+<% end %>
+
+<div id="sidebar">
+  <h3>Your Maps</h3>
+
+  <p><%= button_to 'Create a Map', new_map_url, :method => :get, :class => 'main', :disabled => !current_user || current_user.account_type == 'free' %></p>
+
+  <h4>Unpublished</h4>
+  <% if @unpublished_maps.size == 0 %>
+    <p class="note">You have no unpublished maps.</p>
+  <% else %>
+    <ul>
+      <% @unpublished_maps.each do |m| %>
+        <li><%= link_to m.name, edit_map_url(m) %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <h4>Published</h4>
+  <% if @published_maps.size == 0 %>
+    <p class="note">You have no published maps.</p>
+  <% else %>
+    <ul>
+      <% @published_maps.each do |m| %>
+        <li><%= link_to m.name, m %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
+
+<div id="maps_listing">
+  <div class="dialog_tabs in_page">
+    <%= link_to 'Most Recent', url_for(action: 'index'), class: (params[:pop] ? '' : 'current_tab') %>
+    <%= link_to 'Most Popular', url_for(action: 'index', pop: true), class: (params[:pop] ? 'current_tab' : '') %>
+  </div>
+
+  <table class="listing_table">
+    <tr>
+      <th>Map</th>
+      <th>Size</th>
+      <th>Units</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+    </tr>
+    <% per_page = 10 %>
+    <% @maps.limit(per_page).skip(params[:page] * per_page).each do |m| %>
+      <tr>
+        <td class="large">
+          <%= link_to m.name, m %>
+          by <%= user_link(m.user) %><br/>
+          <span class="note"><%= pluralize(m.player_count, 'player') %> / <%= pluralize(m.play_count, 'play') %></span>
+        </td>
+        <td class="small">
+          <%= m.tiles[0].size %>x<%= m.tiles.size %><br/>
+          (<%= link_to_function('preview', "show_preview('#{m.img_medium || '/images/game/map_preview_placeholder.jpg'}')") %>)
+        </td>
+        <td class="small">
+          <% if !m.air_units? and !m.sea_units? %>
+            Land units only
+          <% else %>
+            <% unit_types = ['Land'] %>
+            <% unit_types << 'air' if m.air_units? %>
+            <% unit_types << 'sea' if m.sea_units? %>
+            <%= unit_types.join(', ') %>
+          <% end %>
+        </td>
+        <td class="small">
+          <%= button_to 'Clone as New Map', clone_map_url(m), :disabled => !current_user || current_user.account_type == 'free' %>
+        </td>
+        <td class="small">
+          <% url = new_game_url(:game => { :map_id => m.id }) %>
+          <%= submit_tag 'Start Game', :onclick => "window.location.href = #{url.inspect.html_safe}; return false;", :disabled => !current_user || !current_user.map_allowed?(m) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
+  <%= render :partial => 'layouts/paginator', :locals => { :collection => @maps, :page => params[:page], :per => per_page, :item_plural => 'maps', :base_url => maps_url(pop: params[:pop]) } %>
+
+  <div class="clear"></div>
+</div>
+
+<div id="preview_dialog" style="display: none" class="dialog">
+  <h3>Map preview (press esc to close)</h3>
+  <div id="preview"></div>
+</div>
+
+<script>
+  var show_preview = null;
+
+  $(document).ready(function() {
+    show_preview = function(src) {
+      var img = src
+      var pre = $('#preview img')
+      
+      if (pre.length == 0) {
+        $('#preview').append('<img src="' + img + '"/>')
+      } else {
+        pre.attr('src', img)
+      }
+      
+      var dialog = $('#preview_dialog')
+      dialog.dialog({ modal: true, closeOnEscape: true, resizable: false, autoOpen: true, width: 465 });
+    }
+  });
+</script>

@@ -1,0 +1,73 @@
+<h2>Available Games</h2>
+
+<% if current_user and current_user.account_type == 'free' %>
+  <% url = url_for(:controller => :home, :action => :why_subscribe) %>
+  <p class="flash_notice">Play games with up to six players and all units by becoming a subscriber! <%= button_to_function 'Learn more'.html_safe, "location.href = '#{url}'", :class => :main %></p>
+<% end %>
+
+<% if games.size > 0 %>
+  <!--<p>In "Free" games, the only allowed units are <%= FreeUnitTypes.map(&:to_s).map(&:underscore).map(&:humanize).map(&:pluralize).to_sentence %>.</p>-->
+
+  <table class="listing_table">
+    <tr>
+      <th>Name</th>
+      <th>Map</th>
+      <th>Host</th>
+      <th>Type</th>
+      <th># Players</th>
+      <th>Time Limit</th>
+      <% if current_user %>
+        <th>&nbsp;</th>
+      <% end %>
+    </tr>
+    <% games.each do |g| %>
+      <tr>
+        <td><%= link_to g.name, game_url(g) %></td>
+        <td class="medium"><%= g.map.name rescue '' %> (<%= link_to('preview', '#', :onclick => "show_preview('#{g.map.img_medium}'); return false") rescue '' %>)</td>
+        <td class="small"><%= user_link(g.users[0]) rescue '' %></td>
+        <td class="small">
+          <%= g.unrated ? 'Unrated' : 'Rated' %>
+          <%# <%= g.game_type.humanize rescue '' %>
+        </td>
+        <td class="small"><%= g.users.size %>/<%= g.starting_player_count %></td>
+        <td class="small"><%= pluralize((g.time_limit / (60 * 60)).to_i, 'hour') %></td>
+        <% if current_user %>
+          <td class="small">
+            <% if g.can_add_player?(current_user) %>
+              <%= button_to 'Join', join_game_url(g) %>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <p>There are currently no open games for you to join. <%= link_to 'Start your own game.', new_game_url %>
+<% end %>
+
+<div id="preview_dialog" style="display: none" class="dialog">
+  <h3>Map preview (press esc to close)</h3>
+  <div id="preview"></div>
+</div>
+
+<script>
+  var show_preview = null;
+
+  $(document).ready(function() {
+    show_preview = function(src) {
+      var img = src
+      var pre = $('#preview img')
+      
+      if (pre.length == 0) {
+        $('#preview').append('<img src="' + img + '"/>')
+      } else {
+        pre.attr('src', img)
+      }
+      
+      var dialog = $('#preview_dialog')
+      dialog.dialog({ modal: true, closeOnEscape: true, resizable: false, autoOpen: true, width: 465 });
+    }
+  });
+</script>
+
+<%= render partial: 'layouts/global_chat' %>

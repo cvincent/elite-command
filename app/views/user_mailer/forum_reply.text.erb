@@ -1,0 +1,16 @@
+Hello, <%= @user.username %>!
+
+A forum discussion in which you participated, "<%= @reply.topic.name %>", has been updated with a new response from <%= @reply.user.username %>:
+
+> <%= @reply.body %>
+
+View the forum topic:
+<%= topic_url(@reply.topic) %>
+
+---
+
+You have received this email because you responded to a topic in the Elite Command forums. You can unsubscribe at the following URL:
+<%= topic_url(@reply.topic) %>
+
+You can also update your global email settings here:
+<%= edit_user_url(@user) %>

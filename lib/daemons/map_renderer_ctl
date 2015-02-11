@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'daemons'
+
+options = {
+  dir_mode: :script,
+  dir: '../../log',
+  multiple: false,
+  backtrace: true,
+  monitor: true
+}
+
+Daemons.run File.dirname(__FILE__) + '/map_renderer.rb', options

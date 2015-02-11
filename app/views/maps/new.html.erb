@@ -1,0 +1,48 @@
+<h2>New Map</h2>
+
+<p>Choose a name, desired size, and the starting terrain of your map below. You may rename your map, rewrite the description, and edit the starting credits before publishing.</p>
+
+<%= render :partial => 'layouts/errors', :locals => { :errors => @map.errors } %>
+
+<%= form_for @map do |f| %>
+  <table>
+    <tr>
+      <th><label>Name:</label></th>
+      <td><%= f.text_field :name %></td>
+    </tr>
+    <tr>
+      <th><label>Description:</label></th>
+      <td><%= f.text_area :description, :rows => 3 %></td>
+    </tr>
+
+    <% size_options = [['20 (small)', '20'], ['40 (large)', '40'], ['60 (huge)', '60']] %>
+    <tr>
+      <th><label>Width:</label></th>
+      <td><%= f.select :tiles_width, size_options %></td>
+    </tr>
+    <tr>
+      <th><label>Height:</label></th>
+      <td><%= f.select :tiles_height, size_options %></td>
+    </tr>
+
+    <tr>
+      <% fill_options = Map::EditorTileTypes.map { |t| [t.to_s.humanize, t] } %>
+      <th><label>Fill Terrain:</label></th>
+      <td><%= f.select :fill_terrain, fill_options %></td>
+    </tr>
+
+    <tr>
+      <th valign="top" style="padding-top: 4px"><label>Starting Credits:</label></th>
+      <td width="250">
+        <%= f.text_field :starting_credits %><br/>
+        <p>Note: Players will each start their first turn with the starting credits you specify <em>plus</em> the credits they earn from their starting bases.</p>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="text-align: right" colspan="2">
+        <%= f.submit 'Create Map', :class => 'main' %>
+      </td>
+    </tr>
+  </table>
+<% end %>

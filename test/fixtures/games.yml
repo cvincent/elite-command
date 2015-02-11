@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  turns_played: 1
+  rounds_played: 1
+  units: 
+  bases: 
+
+two:
+  name: MyString
+  turns_played: 1
+  rounds_played: 1
+  units: 
+  bases: 
